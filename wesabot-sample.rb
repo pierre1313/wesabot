@@ -3,15 +3,14 @@ require 'campfire/polling_bot'
 OpenSSL::debug = true
 
 wes = Campfire::PollingBot.new(
-  :username => 'campfire_username@example.com',
-  :password => 'sekret',
+  :token => 'your_bots_api_token',
   :name => 'Wes', # the name of your bot
   :domain => 'campfire_domain', # <domain>.campfirenow.com
   :ssl => true, # or not, if you like to live dangerously
   :proxy => 'proxy.example.com:8080', # optional
-  :room => '123456', # the Campfire room number to join 
+  :room => 'Room Name', # the Campfire room to join
   :debug => true # print out debuggy goodness
-) 
+)
 
 if ARGV[0]
   wes.say(ARGV[0]) # just say something
