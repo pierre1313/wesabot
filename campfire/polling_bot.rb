@@ -18,7 +18,7 @@ class Campfire
     def run
       # if we're interrupted, leave the room
       trap('INT') { room.leave; exit }
-      
+
       # set up a heartbeat thread for plugins that want them
       Thread.new do
         while true
@@ -26,13 +26,14 @@ class Campfire
           sleep HEARTBEAT_INTERVAL
         end
       end
-      
-      room.listen do |message|
+
+      puts "listening..." if debug
+      room.listen(:on_error => proc {|e| puts "Crap: #{e.message}" }) do |message|
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
         process(message)
       end
-      
+
     rescue Exception => e # leave the room if we crash
       unless e.kind_of?(SystemExit)
         # get the full stack trace...none of this shortened bullshit

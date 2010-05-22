@@ -1,0 +1,86 @@
+--- 
+dependencies: 
+  tinder: 
+    group: 
+    - :default
+    version: ">= 0"
+  data_objects: 
+    group: 
+    - :default
+    version: ">= 0"
+  dm-core: 
+    group: 
+    - :default
+    version: ">= 0"
+  json: 
+    group: 
+    - :default
+    version: ">= 0"
+  railsless-deploy: 
+    group: 
+    - :default
+    version: ">= 0"
+  chronic: 
+    group: 
+    - :default
+    version: ">= 0"
+  do_sqlite3: 
+    group: 
+    - :default
+    version: ">= 0"
+  capistrano: 
+    group: 
+    - :default
+    version: ">= 0"
+specs: 
+- activesupport: 
+    version: 2.3.5
+- addressable: 
+    version: 2.1.2
+- highline: 
+    version: 1.5.2
+- net-ssh: 
+    version: 2.0.22
+- net-scp: 
+    version: 1.0.2
+- net-sftp: 
+    version: 2.0.4
+- net-ssh-gateway: 
+    version: 1.0.1
+- capistrano: 
+    version: 2.5.18
+- chronic: 
+    version: 0.3.0
+- crack: 
+    version: 0.1.6
+- data_objects: 
+    version: 0.10.2
+- extlib: 
+    version: 0.9.15
+- dm-core: 
+    version: 0.10.2
+- do_sqlite3: 
+    version: 0.10.2
+- eventmachine: 
+    version: 0.12.10
+- httparty: 
+    version: 0.5.2
+- json: 
+    version: 1.4.3
+- mime-types: 
+    version: "1.16"
+- railsless-deploy: 
+    version: 1.0.2
+- twitter-stream: 
+    version: 0.1.6
+- tinder: 
+    version: 1.4.0
+    source: 0
+hash: 06ddc20f3fd6df549f6c31f288229077099c4bd2
+sources: 
+- Git: 
+    uri: http://github.com/bgreenlee/tinder.git
+    git: http://github.com/bgreenlee/tinder.git
+    ref: c7af660c16c516a3f33f03d80fc757bed235925f
+- Rubygems: 
+    uri: http://gemcutter.org
