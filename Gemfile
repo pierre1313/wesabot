@@ -8,3 +8,8 @@ gem "data_objects"
 gem "do_sqlite3"
 gem "chronic"
 gem "json"
+
+group :test do
+  gem "rspec", ">= 2.0.0.beta.8"
+  gem "rake" # needed for Rspec::Core::RakeTask
+end

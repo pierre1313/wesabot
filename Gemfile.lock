@@ -1,5 +1,9 @@
 --- 
 dependencies: 
+  rake: 
+    group: 
+    - :test
+    version: ">= 0"
   tinder: 
     group: 
     - :default
@@ -8,6 +12,10 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  rspec: 
+    group: 
+    - :test
+    version: ">= 2.0.0.beta.8"
   dm-core: 
     group: 
     - :default
@@ -33,8 +41,10 @@ dependencies:
     - :default
     version: ">= 0"
 specs: 
+- rake: 
+    version: 0.8.7
 - activesupport: 
-    version: 2.3.5
+    version: 2.3.8
 - addressable: 
     version: 2.1.2
 - highline: 
@@ -55,6 +65,8 @@ specs:
     version: 0.1.6
 - data_objects: 
     version: 0.10.2
+- diff-lcs: 
+    version: 1.1.2
 - extlib: 
     version: 0.9.15
 - dm-core: 
@@ -71,16 +83,24 @@ specs:
     version: "1.16"
 - railsless-deploy: 
     version: 1.0.2
+- rspec-core: 
+    version: 2.0.0.beta.9
+- rspec-expectations: 
+    version: 2.0.0.beta.9
+- rspec-mocks: 
+    version: 2.0.0.beta.9
+- rspec: 
+    version: 2.0.0.beta.9
 - twitter-stream: 
     version: 0.1.6
 - tinder: 
     version: 1.4.0
     source: 0
-hash: 06ddc20f3fd6df549f6c31f288229077099c4bd2
+hash: a53e98960ee1af9549744c09d8a6df5feb6610e4
 sources: 
 - Git: 
     uri: http://github.com/bgreenlee/tinder.git
     git: http://github.com/bgreenlee/tinder.git
-    ref: c7af660c16c516a3f33f03d80fc757bed235925f
+    ref: d76793a2fb7d56729d6afd0116848222a9bc01e8
 - Rubygems: 
     uri: http://gemcutter.org

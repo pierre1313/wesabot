@@ -1,4 +1,3 @@
-$:.unshift "#{File.dirname(__FILE__)}/../vendor/tinder/lib"
 require "rubygems"
 require "tinder"
 
@@ -24,17 +23,17 @@ class Campfire
     def base_uri
       campfire.connection.uri.to_s
     end
-    
+
     # convenience method so I don't have to change all the old #say method to #speak
     def say(*args)
       room.speak(*args)
     end
-    
+
     # pick something at random from an array of sayings
     def say_random(sayings)
       say(sayings[rand(sayings.size)])
     end
-    
+
     # Proxy everything to the room.
     def method_missing(m, *args)
       room.send(m, *args)

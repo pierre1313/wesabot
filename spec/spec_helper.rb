@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../campfire/polling_bot'
-require 'spec'
+require 'rspec'
 
 class FakeBot < Campfire::PollingBot
   def initialize
@@ -23,7 +23,7 @@ class FakeBot < Campfire::PollingBot
   end
 end
 
-Spec::Runner.configure do |s|
+Rspec.configure do |config|
   def load_plugins
     Campfire::PollingBot::Plugin.load_all(self)
   end
@@ -33,7 +33,7 @@ Spec::Runner.configure do |s|
     @plugin.class.bot = bot
     message = Campfire::TextMessage.new(
       :body => what,
-      :person => "John Tester"
+      :user => {:name => "John Tester"}
     )
     @plugin.process(message) if @plugin.accepts?(message)
     return bot.transcript

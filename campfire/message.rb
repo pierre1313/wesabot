@@ -6,7 +6,7 @@ class Campfire
   # the message), person_full_name, and body, which is the text of the message
   class Message
     attr_accessor :message_id, :timestamp, :person, :person_full_name, :body, :type
-  
+
     def initialize(params)
       self.message_id = params[:id]
       self.timestamp = params[:created_at] || Time.now
@@ -15,10 +15,10 @@ class Campfire
         self.person = person_full_name.split(' ').first # just get first name
       end
       self.body = params[:body]
-      self.type = params[:type].gsub(/(.*?)Message$/, '\1')
+      self.type = params[:type].gsub(/(.*?)Message$/, '\1') if params[:type]
     end
   end
-  
+
   # TextMessage - normal user text message
   #   #command - if the message is addressed to the bot ("<bot name>, ..." or "..., <bot name>"), the
   #  the part of the body minus the bot name (and comma) is returned by #command
@@ -34,21 +34,21 @@ class Campfire
   # pasted block (TODO: grab the full paste from the link and have it available)
   class PasteMessage < Message
     attr_accessor :link
-  
+
     def initialize(params)
       super
       self.link = params[:link]
-    end  
+    end
   end
-  
+
   # an UploadMessage is sent when a user uploads a file. #link contains the link to the file
   class UploadMessage < Message
     attr_accessor :link
-  
+
     def initialize(params)
       super
       self.link = params[:link]
-    end  
+    end
   end
 
   # EnterMessage - sent when a user enters the room
@@ -56,16 +56,16 @@ class Campfire
 
   # LeaveMessage - sent when a user leaves the room
   class LeaveMessage < Message; end
-  
+
   # KickMessage - sent when a user times out and is booted from the room
   class KickMessage < Message; end
-  
+
   # LockMessage - sent when a user locks the room
   class LockMessage < Message; end
-  
+
   # UnlockMessage - sent when the room is unlocked
   class UnlockMessage < Message; end
-  
+
   # AllowGuestsMessage - sent when guest access is turned on
   class AllowGuestsMessage < Message; end
 
@@ -74,10 +74,10 @@ class Campfire
 
   # TopicChangeMessage - sent when the room's topic is changed
   class TopicChangeMessage < Message; end
-  
+
   # TimestampMessage - sent when a timestamp is posted to the room
   class TimestampMessage < Message; end
-  
+
   # AdvertisementMessage - ads
   class AdvertisementMessage < Message; end
 end
