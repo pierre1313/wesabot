@@ -2,13 +2,13 @@
 require 'campfire/bot'
 require 'campfire/message'
 
-class Campfire
+module Campfire
   class PollingBot < Bot
     require 'campfire/polling_bot/plugin'
     attr_accessor :plugins
     HEARTBEAT_INTERVAL = 3 # seconds
 
-    def initialize(params = {})
+    def initialize(config)
       # load plugin queue, sorting by priority
       self.plugins = Plugin.load_all(self)
       super
@@ -27,7 +27,7 @@ class Campfire
         end
       end
 
-      puts "listening..." if debug
+      debug "listening..."
       room.listen(:on_error => proc {|e| puts "Crap: #{e.message}" }) do |message|
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
@@ -44,12 +44,12 @@ class Campfire
     end
 
     def process(message)
-      puts "processing #{message} (#{message.person} - #{message.body})" if debug
+      debug "processing #{message} (#{message.person} - #{message.body})"
       plugins.each do |plugin|
         if plugin.accepts?(message)
-          puts "sending to plugin #{plugin} (priority #{plugin.priority})" if debug
+          debug "sending to plugin #{plugin} (priority #{plugin.priority})"
           if plugin.process(message) == Plugin::HALT
-            puts "plugin chain halted" if debug
+            debug "plugin chain halted"
             break
           end
         end

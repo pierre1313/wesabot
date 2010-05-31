@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
+require 'campfire/configuration'
 require 'campfire/polling_bot'
 require 'optparse'
 
 # defaults
-options = {
-  :debug => false
-}
+config = Campfire::Configuration.new
 
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: wesabot.rb [options]"
@@ -13,10 +12,28 @@ optparse = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Options:"
 
-  opts.on("-t", "--token TOKEN", "API token (required)") { |t| options[:token] = t }
-  opts.on("-d", "--domain DOMAIN", "Campfire subdomain (required)") { |d| options[:domain] = d }
-  opts.on("-r", "--room ROOM", "Campfire room (required)") { |r| options[:room] = r }
-  opts.on("-v", "--verbose", "Be verbose") { options[:debug] = true }
+  opts.on("-c", "--config FILE", "Configuration file (required)") do |path|
+    config = Campfire::FileConfiguration.new(path)
+  end
+
+  opts.separator "OR"
+
+  opts.on("-t", "--token TOKEN", "API token (required)") do |api_token|
+    config.api_token = api_token
+  end
+
+  opts.on("-d", "--subdomain SUBDOMAIN", "Campfire subdomain (required)") do |subdomain|
+    config.subdomain = subdomain
+  end
+
+  opts.on("-r", "--room ROOM", "Campfire room (required, allows multiple values)") do |room|
+    config.room = room
+  end
+
+  opts.on("-v", "--verbose", "Be verbose") do
+    config.verbose = true
+  end
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -26,27 +43,13 @@ end
 # check for required options
 begin
   optparse.parse!
-  required = [:token, :domain, :room]
-  missing = required.select{ |param| options[param].nil? }
-  if missing.any?
-    puts "Missing options: #{missing.join(', ')}"
-    puts optparse
-    exit
-  end
-rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-  puts $!.to_s
+  config.validate!
+rescue Campfire::ConfigurationError, OptionParser::InvalidOption, OptionParser::MissingArgument => e
+  puts "#{File.basename($0)}: #{e}"
   puts optparse
-  exit
+  exit(1)
 end
 
-OpenSSL::debug = options[:debug]
+OpenSSL::debug = config.verbose?
 
-wes = Campfire::PollingBot.new(
-  :token => options[:token],
-  :name => options[:name],
-  :domain => options[:domain],
-  :room => options[:room],
-  :debug => options[:debug]
-)
-
-wes.run
+Campfire::PollingBot.new(config).run

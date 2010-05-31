@@ -5,7 +5,7 @@
 #
 require 'dm-core'
 
-class Campfire
+module Campfire
   class PollingBot
     class Plugin
       attr_accessor :config

@@ -1,7 +1,7 @@
 # Classes to encapsulate the various campfire message types
 require 'cgi'
 
-class Campfire
+module Campfire
   # base message class. All messages have a message_id, timestamp, person (first name of the user generating
   # the message), person_full_name, and body, which is the text of the message
   class Message

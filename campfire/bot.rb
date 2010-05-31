@@ -1,19 +1,15 @@
-require "rubygems"
 require "tinder"
 
-class Campfire
+module Campfire
   class Bot
-    attr_accessor :campfire, :room, :domain, :token, :name, :ssl, :debug
+    attr_accessor :config, :room, :name, :campfire
 
-    def initialize(params = {})
-      self.debug = params[:debug]
-      self.ssl = params[:ssl]
-      self.domain = params[:domain]
-      self.token = params[:token]
-      self.campfire = Tinder::Campfire.new(domain, :ssl => ssl, :token => token)
-      self.name = campfire.me["name"]
+    def initialize(config)
+      self.config = config
+      self.campfire = Tinder::Campfire.new(config.subdomain, :ssl => config.ssl?, :token => config.api_token)
+      self.name = campfire.me['name']
       begin
-        self.room = campfire.find_room_by_name(params[:room]) or raise "Could not find a room named '#{params[:room]}'"
+        self.room = campfire.find_room_by_name(config.room) or raise "Could not find a room named '#{config.room}'"
       rescue Tinder::AuthenticationFailed => e
         raise # maybe do some friendlier error handling later
       end
@@ -32,6 +28,10 @@ class Campfire
     # pick something at random from an array of sayings
     def say_random(sayings)
       say(sayings[rand(sayings.size)])
+    end
+
+    def debug(message)
+      puts message if config.verbose?
     end
 
     # Proxy everything to the room.
