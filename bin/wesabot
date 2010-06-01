@@ -69,4 +69,7 @@ end
 
 OpenSSL::debug = config.verbose?
 
-Campfire::PollingBot.new(config).run
+bot = Campfire::PollingBot.new(config)
+trap(:INT)  { bot.leave; exit }
+trap(:TERM) { bot.leave; exit }
+bot.run

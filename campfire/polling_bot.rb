@@ -16,9 +16,6 @@ module Campfire
 
     # main event loop
     def run
-      # if we're interrupted, leave the room
-      trap('INT') { room.leave; exit }
-
       # set up a heartbeat thread for plugins that want them
       Thread.new do
         while true
