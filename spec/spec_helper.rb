@@ -1,9 +1,15 @@
+require 'rubygems'
+require 'bundler'
+Bundler.setup
+
 require File.dirname(__FILE__) + '/../campfire/polling_bot'
+require File.dirname(__FILE__) + '/../campfire/configuration'
 require 'rspec'
 
 class FakeBot < Campfire::PollingBot
   def initialize
     self.name = 'Wes'
+    self.config = Campfire::Configuration.new
   end
 
   def say(message)

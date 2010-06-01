@@ -3,7 +3,6 @@ require 'campfire/configuration'
 require 'campfire/polling_bot'
 require 'optparse'
 
-# defaults
 config = Campfire::Configuration.new
 
 optparse = OptionParser.new do |opts|

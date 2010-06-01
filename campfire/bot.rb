@@ -7,9 +7,10 @@ module Campfire
     def initialize(config)
       self.config = config
       self.campfire = Tinder::Campfire.new(config.subdomain, :ssl => config.ssl?, :token => config.api_token)
-      self.name = campfire.me['name']
       begin
-        self.room = campfire.find_room_by_name(config.room) or raise "Could not find a room named '#{config.room}'"
+        self.name = campfire.me['name']
+        self.room = campfire.find_room_by_name(config.room) or
+          raise ConfigurationError, "Could not find a room named '#{config.room}'"
       rescue Tinder::AuthenticationFailed => e
         raise # maybe do some friendlier error handling later
       end
