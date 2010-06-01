@@ -51,6 +51,10 @@ optparse = OptionParser.new do |opts|
     config.verbose = true
   end
 
+  opts.on("--database", "The path to the sqlite3 database to use (required)") do |path|
+    config.datauri = "sqlite3://#{Pathname(File.expand_path(path, oldpwd)).realpath}"
+  end
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit

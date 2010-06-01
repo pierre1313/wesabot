@@ -65,7 +65,7 @@ module Campfire
         end
 
         # set up the database now that the plugins are loaded
-        setup_database
+        setup_database(bot.config.datauri)
 
         plugin_classes = self.subclasses.sort {|a,b| b.priority <=> a.priority }
         # initialize plugins
@@ -74,8 +74,8 @@ module Campfire
       end
 
       # set up the plugin database
-      def self.setup_database
-        DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/campfire/polling_bot/plugins/data/plugin.db")
+      def self.setup_database(datauri)
+        DataMapper.setup(:default, datauri)
         DataMapper.auto_upgrade!
       end
 

@@ -15,11 +15,12 @@ module Campfire
       self.room      = data[:room]
       self.verbose   = data[:verbose] || false
       self.ssl       = data[:ssl] || false
+      self.datauri   = data[:datauri]
     end
 
     public
 
-    attr_accessor :api_token, :subdomain, :room, :verbose, :ssl
+    attr_accessor :api_token, :subdomain, :room, :verbose, :ssl, :datauri
 
     alias_method :verbose?, :verbose
     alias_method :ssl?, :ssl
@@ -28,6 +29,7 @@ module Campfire
       api_token or raise ConfigurationError, 'no api token given'
       subdomain or raise ConfigurationError, 'no subdomain given'
       room      or raise ConfigurationError, 'no room given'
+      datauri   or raise ConfigurationError, 'no datauri given'
     end
 
     def reload!

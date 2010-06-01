@@ -10,8 +10,8 @@ module Campfire
 
     def initialize(config)
       # load plugin queue, sorting by priority
-      self.plugins = Plugin.load_all(self)
       super
+      self.plugins = Plugin.load_all(self)
     end
 
     # main event loop
