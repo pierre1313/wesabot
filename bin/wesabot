@@ -1,6 +1,24 @@
 #!/usr/bin/env ruby
+require 'pathname'
+
+# get the real path of this file so we can load the library
+file = Pathname.new(__FILE__).realpath
+
+# chdir to this project's directory so bundler will be able to find
+# the .bundle directory itself
+oldpwd = Dir.pwd
+Dir.chdir(File.expand_path('../..', file))
+
+# load dependencies
+require 'rubygems'
+require 'bundler'
+Bundler.setup
+
+# load the library
 require 'campfire/configuration'
 require 'campfire/polling_bot'
+
+# get configuration from ARGV
 require 'optparse'
 
 config = Campfire::Configuration.new
@@ -12,7 +30,7 @@ optparse = OptionParser.new do |opts|
   opts.separator "Options:"
 
   opts.on("-c", "--config FILE", "Configuration file (required)") do |path|
-    config = Campfire::FileConfiguration.new(path)
+    config = Campfire::FileConfiguration.new(File.expand_path(path, oldpwd))
   end
 
   opts.separator "OR"
