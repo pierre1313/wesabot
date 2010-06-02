@@ -6,7 +6,7 @@ gem "tinder", :git => "http://github.com/bgreenlee/tinder.git"
 gem "dm-core"
 gem "data_objects"
 gem "do_sqlite3"
-gem "chronic"
+gem "chronic", '0.2.3'
 gem "json"
 
 group :test do

@@ -31,7 +31,7 @@ dependencies:
   chronic: 
     group: 
     - :default
-    version: ">= 0"
+    version: = 0.2.3
   do_sqlite3: 
     group: 
     - :default
@@ -59,8 +59,14 @@ specs:
     version: 1.0.1
 - capistrano: 
     version: 2.5.18
+- json_pure: 
+    version: 1.4.3
+- rubyforge: 
+    version: 2.0.4
+- hoe: 
+    version: 2.6.0
 - chronic: 
-    version: 0.3.0
+    version: 0.2.3
 - crack: 
     version: 0.1.6
 - data_objects: 
@@ -96,11 +102,11 @@ specs:
 - tinder: 
     version: 1.4.0
     source: 0
-hash: a53e98960ee1af9549744c09d8a6df5feb6610e4
+hash: c2b554a9f7fa373616b98eaebb1f2009121178d9
 sources: 
 - Git: 
     uri: http://github.com/bgreenlee/tinder.git
     git: http://github.com/bgreenlee/tinder.git
-    ref: d76793a2fb7d56729d6afd0116848222a9bc01e8
+    ref: 705091f6892c4023ef73585d69053a58bcf41de5
 - Rubygems: 
     uri: http://gemcutter.org
