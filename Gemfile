@@ -8,6 +8,7 @@ gem "data_objects"
 gem "do_sqlite3"
 gem "chronic", '0.2.3'
 gem "json"
+gem "daemons"
 
 group :test do
   gem "rspec", ">= 2.0.0.beta.8"

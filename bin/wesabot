@@ -22,9 +22,10 @@ require 'campfire/polling_bot'
 require 'optparse'
 
 config = Campfire::Configuration.new
+daemonize = false
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: wesabot.rb [options]"
+  opts.banner = "Usage: #{File.basename($0)} [options]"
 
   opts.separator ""
   opts.separator "Options:"
@@ -43,16 +44,24 @@ optparse = OptionParser.new do |opts|
     config.subdomain = subdomain
   end
 
-  opts.on("-r", "--room ROOM", "Campfire room (required, allows multiple values)") do |room|
+  opts.on("-r", "--room ROOM", "Campfire room (required)") do |room|
     config.room = room
+  end
+
+  opts.on("--database PATH", "The sqlite3 database to use (required)") do |path|
+    config.datauri = "sqlite3://#{Pathname(File.expand_path(path, oldpwd)).realpath}"
+  end
+
+  opts.on("-D", "--daemonize", "Daemonize the bot (run in the background)") do
+    daemonize = true
+  end
+
+  opts.on("-o", "--log-file PATH", "The file to log STDOUT and STDERR to") do |path|
+    config.logger = Logger.new(path)
   end
 
   opts.on("-v", "--verbose", "Be verbose") do
     config.verbose = true
-  end
-
-  opts.on("--database", "The path to the sqlite3 database to use (required)") do |path|
-    config.datauri = "sqlite3://#{Pathname(File.expand_path(path, oldpwd)).realpath}"
   end
 
   opts.on_tail("-h", "--help", "Show this message") do
@@ -65,6 +74,14 @@ end
 begin
   optparse.parse!
   config.validate!
+
+  config.logger.level = config.verbose?? Logger::DEBUG : Logger::INFO
+
+  if daemonize
+    require 'daemons'
+    puts "Daemonizing..."
+    Daemons.daemonize
+  end
 rescue Campfire::ConfigurationError, OptionParser::InvalidOption, OptionParser::MissingArgument => e
   puts "#{File.basename($0)}: #{e}"
   puts optparse

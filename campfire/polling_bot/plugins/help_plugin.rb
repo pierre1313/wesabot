@@ -2,7 +2,7 @@
 class HelpPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
   priority 0
-  
+
   def process(message)
     person = message.person
     case message.command
@@ -14,7 +14,7 @@ class HelpPlugin < Campfire::PollingBot::Plugin
         begin
           help[plugin.to_s] = plugin.help if plugin.respond_to?(:help)
         rescue Exception => e
-          puts "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+          logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
         end
       end
       help.keys.sort.each do |plugin|
@@ -26,7 +26,7 @@ class HelpPlugin < Campfire::PollingBot::Plugin
       return HALT
     end
   end
-  
+
   # return array of available commands and descriptions
   def help
     [['help', "this message"]]

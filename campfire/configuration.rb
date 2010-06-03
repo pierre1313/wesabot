@@ -1,3 +1,5 @@
+require 'logger'
+
 module Campfire
   class ConfigurationError < RuntimeError; end
 
@@ -16,20 +18,27 @@ module Campfire
       self.verbose   = data[:verbose] || false
       self.ssl       = data[:ssl] || false
       self.datauri   = data[:datauri]
+      self.logger    = data[:logger] || data[:logfile] || Logger.new(STDOUT)
     end
 
     public
 
-    attr_accessor :api_token, :subdomain, :room, :verbose, :ssl, :datauri
+    attr_accessor :api_token, :subdomain, :room, :verbose, :ssl, :datauri, :logger
 
     alias_method :verbose?, :verbose
     alias_method :ssl?, :ssl
+
+    def logger=(logger)
+      logger = Logger.new(logger) unless logger.is_a?(Logger)
+      @logger = logger
+    end
 
     def validate!
       api_token or raise ConfigurationError, 'no api token given'
       subdomain or raise ConfigurationError, 'no subdomain given'
       room      or raise ConfigurationError, 'no room given'
       datauri   or raise ConfigurationError, 'no datauri given'
+      logger    or raise ConfigurationError, 'no logger given'
     end
 
     def reload!

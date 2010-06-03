@@ -31,8 +31,8 @@ module Campfire
       say(sayings[rand(sayings.size)])
     end
 
-    def debug(message)
-      puts message if config.verbose?
+    def logger
+      config.logger
     end
 
     # Proxy everything to the room.

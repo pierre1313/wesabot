@@ -48,6 +48,10 @@ module Campfire
         @bot || self.class.bot
       end
 
+      def logger
+        bot.logger
+      end
+
       HALT = 1 # returned by a command when command processing should halt (continues by default)
 
       def self.load_all(bot)
@@ -60,7 +64,7 @@ module Campfire
           begin
             path.match(/(.*?)\.rb$/) && (require $1)
           rescue Exception => ex
-            $stderr.puts "!! Unable to load #{path}: #{ex.message}", *ex.backtrace
+            logger.error "Unable to load #{path}: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
           end
         end
 

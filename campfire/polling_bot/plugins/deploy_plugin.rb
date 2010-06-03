@@ -30,7 +30,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
       range = nil
       begin
         range = "#{deployed_revision(project)}..HEAD"
-        bot.debug "asking for shortlog in range #{range}"
+        logger.debug "asking for shortlog in range #{range}"
         shortlog = project_shortlog(project, range)
       rescue => e
         bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{project}, got a #{e.class}:")

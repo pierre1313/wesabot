@@ -24,8 +24,8 @@ module Campfire
         end
       end
 
-      debug "listening..."
-      room.listen(:on_error => proc {|e| puts "Crap: #{e.message}" }) do |message|
+      logger.debug "listening..."
+      room.listen(:on_error => proc {|e| logger.error "Crap: #{e.message}" }) do |message|
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
         process(message)
@@ -34,19 +34,19 @@ module Campfire
     rescue Exception => e # leave the room if we crash
       unless e.kind_of?(SystemExit)
         # get the full stack trace...none of this shortened bullshit
-        puts "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+        logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
         room.leave
         exit 1
       end
     end
 
     def process(message)
-      debug "processing #{message} (#{message.person} - #{message.body})"
+      logger.debug "processing #{message} (#{message.person} - #{message.body})"
       plugins.each do |plugin|
         if plugin.accepts?(message)
-          debug "sending to plugin #{plugin} (priority #{plugin.priority})"
+          logger.debug "sending to plugin #{plugin} (priority #{plugin.priority})"
           if plugin.process(message) == Plugin::HALT
-            debug "plugin chain halted"
+            logger.debug "plugin chain halted"
             break
           end
         end
