@@ -2,7 +2,7 @@
 class TweetPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
   priority 20
-  
+
   def process(message)
     case message.command
     when /^(?:tweet|twitter):?\s*("?)(.*?)\1$/i
@@ -54,9 +54,10 @@ class TweetPlugin < Campfire::PollingBot::Plugin
 
   # return array of available commands and descriptions
   def help
-    [['tweet: <message>', "post <message> to #{config['username']}'s twitter account"],
+    user = username || 'the configured user'
+    [['tweet: <message>', "post <message> to #{user}'s twitter account"],
      ['save tweet: <message>', "save <message> for later"],
-     ['show tweets', "shows the queued tweets for #{config['username']}'s twitter account"],
+     ['show tweets', "shows the queued tweets for #{user}'s twitter account"],
      ['show next tweet', "shows the oldest queued twitter message"],
      ['post next tweet', "sends the oldest queued twitter message"],
      ['post tweet <n>', "sends the <n>th tweet from the list"],
@@ -65,9 +66,26 @@ class TweetPlugin < Campfire::PollingBot::Plugin
 
   private
 
+  def username
+    config && config['username']
+  end
+
+  def password
+    config && config['password']
+  end
+
+  def proxy
+    config && config['proxy']
+  end
+
   def post_tweet(tweet)
+    if username.nil? || password.nil?
+      bot.say("The twitter plugin is not properly configured!")
+      return
+    end
+
     begin
-      Tweet.tweet(tweet.to_s, config['username'], config['password'], config['proxy'])
+      Tweet.tweet(tweet.to_s, username, password, proxy)
       bot.say("Ok, tweeted: #{tweet}")
     rescue Tweet::TwitterError => ex
       bot.say("Hmm...didn't work. Got this response:")
