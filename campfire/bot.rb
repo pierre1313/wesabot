@@ -6,7 +6,9 @@ module Campfire
 
     def initialize(config)
       self.config = config
-      self.campfire = Tinder::Campfire.new(config.subdomain, :ssl => config.ssl?, :token => config.api_token)
+      options = {:token => config.api_token}
+      options[:ssl] = config.ssl? if config.ssl != nil
+      self.campfire = Tinder::Campfire.new(config.subdomain, options)
       begin
         self.name = campfire.me['name']
         self.room = campfire.find_room_by_name(config.room) or

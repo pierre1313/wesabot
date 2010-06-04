@@ -16,7 +16,7 @@ module Campfire
       self.subdomain = data[:subdomain]
       self.room      = data[:room]
       self.verbose   = data[:verbose] || false
-      self.ssl       = data[:ssl] || false
+      self.ssl       = data[:ssl]
       self.datauri   = data[:datauri]
       self.logger    = data[:logger] || data[:logfile] || Logger.new(STDOUT)
     end
