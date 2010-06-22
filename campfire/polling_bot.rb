@@ -42,6 +42,11 @@ module Campfire
 
     def process(message)
       logger.debug "processing #{message} (#{message.person} - #{message.body})"
+      if message.person == self.name || message.person_full_name == self.name
+        logger.warn "ignoring message from myself!"
+        return
+      end
+
       plugins.each do |plugin|
         if plugin.accepts?(message)
           logger.debug "sending to plugin #{plugin} (priority #{plugin.priority})"
