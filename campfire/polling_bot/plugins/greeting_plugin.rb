@@ -125,7 +125,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
   def wants_greeting(person, wants_greeting)
     setting = GreetingSetting.first(:person => person)
-    setting.update_attributes(:wants_greeting => wants_greeting)
+    setting.update(:wants_greeting => wants_greeting)
     @wants_greeting[person] = wants_greeting
   end
 end

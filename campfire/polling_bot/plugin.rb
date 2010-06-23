@@ -57,16 +57,7 @@ module Campfire
       def self.load_all(bot)
         self.bot = bot
 
-        # load all models & plugins
-        paths  = Dir.glob(File.dirname(__FILE__) + "/plugins/models/*.rb")
-        paths += Dir.glob(File.dirname(__FILE__) + "/plugins/*.rb")
-        paths.each do |path|
-          begin
-            path.match(/(.*?)\.rb$/) && (require $1)
-          rescue Exception => ex
-            logger.error "Unable to load #{path}: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
-          end
-        end
+        load_plugin_classes
 
         # set up the database now that the plugins are loaded
         setup_database(bot.config.datauri)
@@ -75,6 +66,19 @@ module Campfire
         # initialize plugins
         plugins = plugin_classes.map { |p_class| p_class.new }
         return plugins
+      end
+
+      def self.load_plugin_classes
+        # load all models & plugins
+        paths  = Dir.glob(File.dirname(__FILE__) + "/plugins/models/*.rb")
+        paths += Dir.glob(File.dirname(__FILE__) + "/plugins/*.rb")
+        paths.each do |path|
+          begin
+            path.match(/(.*?)\.rb$/) && (require $1)
+          rescue Exception => ex
+            $stderr.puts "Unable to load #{path}: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+          end
+        end
       end
 
       # set up the plugin database

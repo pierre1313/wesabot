@@ -2,14 +2,17 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
-require File.dirname(__FILE__) + '/../campfire/polling_bot'
-require File.dirname(__FILE__) + '/../campfire/configuration'
+require File.expand_path('../../campfire/polling_bot', __FILE__)
+require File.expand_path('../../campfire/configuration', __FILE__)
 require 'rspec'
+
+Campfire::PollingBot::Plugin.load_plugin_classes
 
 class FakeBot < Campfire::PollingBot
   def initialize
     self.name = 'Wes'
-    self.config = Campfire::Configuration.new
+    self.config = Campfire::Configuration.new(:datauri => "sqlite3://#{File.expand_path('../test.sqlite', __FILE__)}")
+    Campfire::PollingBot::Plugin.load_all(self)
   end
 
   def say(message)
@@ -30,22 +33,32 @@ class FakeBot < Campfire::PollingBot
 end
 
 Rspec.configure do |config|
-  def load_plugins
-    Campfire::PollingBot::Plugin.load_all(self)
-  end
-
   def saying(what)
-    bot = FakeBot.new
-    @plugin.class.bot = bot
-    message = Campfire::TextMessage.new(
-      :body => what,
-      :user => {:name => "John Tester"}
-    )
-    @plugin.process(message) if @plugin.accepts?(message)
-    return bot.transcript
+    message Campfire::TextMessage, :body => what
   end
 
   alias :asking :saying
+  alias :say    :saying
+
+  def entering
+    message Campfire::EnterMessage
+  end
+
+  alias :enter :entering
+
+  def leaving
+    message Campfire::LeaveMessage
+  end
+
+  alias :leave :leaving
+
+  def message(type, params={})
+    bot = FakeBot.new
+    @plugin.class.bot = bot
+    message = type.new(params.merge(:user => {:name => "John Tester"}))
+    @plugin.process(message) if @plugin.accepts?(message)
+    return bot.transcript
+  end
 
   def make_wes_say(what)
     MakeWesSend.new.and_say(what)
@@ -159,6 +172,7 @@ Rspec.configure do |config|
     include MessagePrinter
 
     def matches?(actual)
+      @actual = actual
       actual.any?
     end
 
@@ -168,9 +182,7 @@ Rspec.configure do |config|
 
     def negative_failure_message
       "expected Wes not to say anything, but he did:\n\n" +
-        print_messages(@expected)
+        print_messages(@actual)
     end
   end
 end
-
-load_plugins

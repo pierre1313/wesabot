@@ -1,16 +1,20 @@
 --- 
 dependencies: 
-  rake: 
+  ruby-debug: 
     group: 
     - :test
+    version: ">= 0"
+  tinder: 
+    group: 
+    - :default
     version: ">= 0"
   data_objects: 
     group: 
     - :default
     version: ">= 0"
-  tinder: 
+  rake: 
     group: 
-    - :default
+    - :test
     version: ">= 0"
   rspec: 
     group: 
@@ -19,12 +23,12 @@ dependencies:
   dm-core: 
     group: 
     - :default
-    version: ">= 0"
+    version: = 0.10.2
   json: 
     group: 
     - :default
     version: ">= 0"
-  daemons: 
+  railsless-deploy: 
     group: 
     - :default
     version: ">= 0"
@@ -32,15 +36,15 @@ dependencies:
     group: 
     - :default
     version: = 0.2.3
-  railsless-deploy: 
-    group: 
-    - :default
-    version: ">= 0"
-  capistrano: 
+  daemons: 
     group: 
     - :default
     version: ">= 0"
   do_sqlite3: 
+    group: 
+    - :default
+    version: ">= 0"
+  capistrano: 
     group: 
     - :default
     version: ">= 0"
@@ -54,7 +58,7 @@ specs:
 - highline: 
     version: 1.5.2
 - net-ssh: 
-    version: 2.0.22
+    version: 2.0.23
 - net-scp: 
     version: 1.0.2
 - net-sftp: 
@@ -62,7 +66,7 @@ specs:
 - net-ssh-gateway: 
     version: 1.0.1
 - capistrano: 
-    version: 2.5.18
+    version: 2.5.19
 - json_pure: 
     version: 1.4.3
 - rubyforge: 
@@ -71,10 +75,12 @@ specs:
     version: 2.6.1
 - chronic: 
     version: 0.2.3
+- columnize: 
+    version: 0.3.1
 - crack: 
-    version: 0.1.6
+    version: 0.1.7
 - daemons: 
-    version: 1.0.10
+    version: 1.1.0
 - data_objects: 
     version: 0.10.2
 - diff-lcs: 
@@ -88,27 +94,33 @@ specs:
 - eventmachine: 
     version: 0.12.10
 - httparty: 
-    version: 0.5.2
+    version: 0.6.0
 - json: 
     version: 1.4.3
+- linecache: 
+    version: "0.43"
 - mime-types: 
     version: "1.16"
 - railsless-deploy: 
     version: 1.0.2
 - rspec-core: 
-    version: 2.0.0.beta.10
+    version: 2.0.0.beta.12
 - rspec-expectations: 
-    version: 2.0.0.beta.10
+    version: 2.0.0.beta.12
 - rspec-mocks: 
-    version: 2.0.0.beta.10
+    version: 2.0.0.beta.12
 - rspec: 
-    version: 2.0.0.beta.10
+    version: 2.0.0.beta.12
+- ruby-debug-base: 
+    version: 0.10.3
+- ruby-debug: 
+    version: 0.10.3
 - twitter-stream: 
     version: 0.1.6
 - tinder: 
     version: 1.4.0
     source: 0
-hash: 21a0a227d72130c9b755e9fc6210730410fa588a
+hash: a2e45883f83281d0384d04068ecaa46d7ac595e2
 sources: 
 - Git: 
     uri: http://github.com/bgreenlee/tinder.git
