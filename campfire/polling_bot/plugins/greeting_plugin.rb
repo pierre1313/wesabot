@@ -3,14 +3,14 @@
 class GreetingPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
   accepts :enter_message
-  
+
   def process(message)
     wants_greeting = wants_greeting?(message.person_full_name)
     if message.kind_of?(Campfire::EnterMessage) && wants_greeting
       msg = "Hey #{message.person.downcase}."
       if link = catch_up_link(message.person_full_name)
         msg += " Catch up: #{link}"
-      end 
+      end
       bot.say(msg)
       future_messages(message.person_full_name, message.person).each do |future_message|
         bot.say(future_message)
@@ -48,16 +48,16 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
      ['catch me up|ketchup', "gives you a link to the point in the transcript where you last logged out"]
     ]
   end
-  
+
   private
-  
+
   # return the message id of the user's last entry before leaving the room
   def last_message_id(person_full_name)
     last_left = Message.first(
       :conditions => {:person => person_full_name, :message_type => ['Leave','Kick']},
       :order => [:timestamp.desc])
-    
-    if last_left  
+
+    if last_left
       # if person timed out, look for their last entry before the timeout
       if last_left.message_type == 'Kick'
         last_left = Message.first(
@@ -70,7 +70,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       end
     end
   end
-    
+
   # get link to when the user last left the room so they can catch up
   # only give the link if they've been gone for more than 2 minutes
   def catch_up_link(person_full_name)
@@ -78,8 +78,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       return "#{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{message_id}"
     end
   end
-  
-  # Tell the person who's just entered about what people were asking them to 
+
+  # Tell the person who's just entered about what people were asking them to
   # read about while they were gone.
   def future_messages(person_full_name, person)
     future_messages = []
@@ -90,11 +90,11 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
              "went all", "tested the concept of"]
     future_person    = Regexp.new("future #{person}", Regexp::IGNORECASE)
     future_everybody = Regexp.new("future everybody", Regexp::IGNORECASE)
-    
+
     if message_id = last_message_id(person_full_name)
       candidates = Message.all(
         :message_id.gt => message_id,
-        :person.not => ['Fogbugz','Subversion','GeneralZod','Capistrano','Wes'],
+        :person.not => ['Fogbugz','Subversion','GeneralZod','Capistrano',bot.name],
         :message_type => 'Text')
       candidates.each do |row|
         if row.body.match(future_person)
@@ -108,21 +108,21 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     end
     return future_messages
   end
-             
+
   def wants_greeting?(person)
     unless @wants_greeting
       @wants_greeting = {}
       GreetingSetting.all.each { |setting| @wants_greeting[setting.person] = setting.wants_greeting }
     end
-    
+
     if @wants_greeting[person].nil?
       GreetingSetting.create(:person => person, :wants_greeting => true)
       @wants_greeting[person] = true
     end
-    
-    return @wants_greeting[person]      
+
+    return @wants_greeting[person]
   end
-  
+
   def wants_greeting(person, wants_greeting)
     setting = GreetingSetting.first(:person => person)
     setting.update_attributes(:wants_greeting => wants_greeting)
