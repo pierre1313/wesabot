@@ -4,11 +4,11 @@ dependencies:
     group: 
     - :test
     version: ">= 0"
-  tinder: 
+  data_objects: 
     group: 
     - :default
     version: ">= 0"
-  data_objects: 
+  tinder: 
     group: 
     - :default
     version: ">= 0"
@@ -23,8 +23,20 @@ dependencies:
   dm-core: 
     group: 
     - :default
-    version: = 0.10.2
+    version: ">= 0"
   json: 
+    group: 
+    - :default
+    version: ">= 0"
+  dm-sqlite-adapter: 
+    group: 
+    - :default
+    version: ">= 0"
+  daemons: 
+    group: 
+    - :default
+    version: ">= 0"
+  chronic: 
     group: 
     - :default
     version: ">= 0"
@@ -32,15 +44,11 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-  chronic: 
-    group: 
-    - :default
-    version: = 0.2.3
-  daemons: 
+  i18n: 
     group: 
     - :default
     version: ">= 0"
-  do_sqlite3: 
+  dm-migrations: 
     group: 
     - :default
     version: ">= 0"
@@ -48,37 +56,33 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
+  do_sqlite3: 
+    group: 
+    - :default
+    version: ">= 0"
 specs: 
 - rake: 
     version: 0.8.7
 - activesupport: 
-    version: 2.3.8
+    version: 3.0.3
 - addressable: 
-    version: 2.1.2
+    version: 2.2.2
 - highline: 
-    version: 1.5.2
+    version: 1.6.1
 - net-ssh: 
     version: 2.0.23
 - net-scp: 
-    version: 1.0.2
+    version: 1.0.4
 - net-sftp: 
-    version: 2.0.4
+    version: 2.0.5
 - net-ssh-gateway: 
     version: 1.0.1
 - capistrano: 
     version: 2.5.19
-- json_pure: 
-    version: 1.4.3
-- rubyforge: 
-    version: 2.0.4
-- hoe: 
-    version: 2.6.1
 - chronic: 
-    version: 0.2.3
+    version: 0.3.0
 - columnize: 
-    version: 0.3.1
-- crack: 
-    version: 0.1.7
+    version: 0.3.2
 - daemons: 
     version: 1.1.0
 - data_objects: 
@@ -88,43 +92,52 @@ specs:
 - extlib: 
     version: 0.9.15
 - dm-core: 
-    version: 0.10.2
+    version: 1.0.2
+- dm-do-adapter: 
+    version: 1.0.2
+- dm-migrations: 
+    version: 1.0.2
 - do_sqlite3: 
     version: 0.10.2
+- dm-sqlite-adapter: 
+    version: 1.0.2
 - eventmachine: 
     version: 0.12.10
-- httparty: 
-    version: 0.6.0
+- multipart-post: 
+    version: 1.0.1
+- rack: 
+    version: 1.2.1
+- faraday: 
+    version: 0.5.3
+- i18n: 
+    version: 0.4.2
 - json: 
-    version: 1.4.3
+    version: 1.4.6
 - linecache: 
     version: "0.43"
 - mime-types: 
     version: "1.16"
 - railsless-deploy: 
     version: 1.0.2
+- roauth: 
+    version: 0.0.3
 - rspec-core: 
-    version: 2.0.0.beta.12
+    version: 2.1.0
 - rspec-expectations: 
-    version: 2.0.0.beta.12
+    version: 2.1.0
 - rspec-mocks: 
-    version: 2.0.0.beta.12
+    version: 2.1.0
 - rspec: 
-    version: 2.0.0.beta.12
+    version: 2.1.0
 - ruby-debug-base: 
-    version: 0.10.3
+    version: 0.10.4
 - ruby-debug: 
-    version: 0.10.3
+    version: 0.10.4
 - twitter-stream: 
-    version: 0.1.6
+    version: 0.1.10
 - tinder: 
-    version: 1.4.0
-    source: 0
-hash: a2e45883f83281d0384d04068ecaa46d7ac595e2
+    version: 1.4.2
+hash: a9ed533f09a3b82ed53f39f149313f96181408fc
 sources: 
-- Git: 
-    uri: http://github.com/bgreenlee/tinder.git
-    git: http://github.com/bgreenlee/tinder.git
-    ref: 705091f6892c4023ef73585d69053a58bcf41de5
 - Rubygems: 
     uri: http://gemcutter.org

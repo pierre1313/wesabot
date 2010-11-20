@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'pathname'
+require 'openssl'
 
 # get the real path of this file so we can load the library
 file = Pathname.new(__FILE__).realpath

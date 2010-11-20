@@ -2,11 +2,13 @@ source :gemcutter
 
 gem "capistrano"
 gem "railsless-deploy"
-gem "tinder", :git => "http://github.com/bgreenlee/tinder.git"
-gem "dm-core",      '0.10.2'
+gem "tinder"
+gem "dm-core"
+gem "dm-sqlite-adapter"
+gem "dm-migrations"
 gem "data_objects"
 gem "do_sqlite3"
-gem "chronic",      '0.2.3'
+gem "chronic"
 gem "json"
 gem "daemons"
 gem "i18n"

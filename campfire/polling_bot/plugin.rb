@@ -4,6 +4,7 @@
 # See sample_plugin.rb for more information.
 #
 require 'dm-core'
+require 'dm-migrations'
 
 module Campfire
   class PollingBot
