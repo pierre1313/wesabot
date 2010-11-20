@@ -80,4 +80,10 @@ module Campfire
 
   # AdvertisementMessage - ads
   class AdvertisementMessage < Message; end
+
+  # SoundMessage - when a user plays a sound
+  class SoundMessage < Message; end
+
+  # ConferenceCreatedMessage - when a conference call is started
+  class ConferenceCreatedMessage < Message; end
 end
