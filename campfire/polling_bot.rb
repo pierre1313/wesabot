@@ -43,7 +43,7 @@ module Campfire
     def process(message)
       logger.debug "processing #{message} (#{message.person} - #{message.body})"
       if message.person == self.name || message.person_full_name == self.name
-        logger.warn "ignoring message from myself!"
+        # ignore messages from ourself
         return
       end
 
