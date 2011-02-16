@@ -14,11 +14,7 @@ If any of your plugins need to use a database, just drop a Datamapper model in t
 Installation
 ------------
 
-You'll need SQLite3 installed (http://www.sqlite.org/), and a number of gems:
-
-    sudo gem install dm-core do_sqlite3 activesupport httparty mime-types chronic
-
-Then copy `wesabot-sample.rb` to `wesabot.rb` and add your Campfire credentials.
+You'll need SQLite3 installed (http://www.sqlite.org/). Then just run `bundle install`, and copy `wesabot.yml.sample` to `wesabot.yml` and add your Campfire credentials.
 
 Once Wes (or whatever you decide to name your bot) is running, you can see a list of available commands by entering into Campfire:
 
