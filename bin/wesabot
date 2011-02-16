@@ -12,8 +12,7 @@ Dir.chdir(File.expand_path('../..', file))
 
 # load dependencies
 require 'rubygems'
-require 'bundler'
-Bundler.setup
+require 'bundler/setup'
 
 # load the library
 require 'campfire/configuration'

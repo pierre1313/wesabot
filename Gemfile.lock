@@ -1,143 +1,96 @@
---- 
-dependencies: 
-  ruby-debug: 
-    group: 
-    - :test
-    version: ">= 0"
-  data_objects: 
-    group: 
-    - :default
-    version: ">= 0"
-  tinder: 
-    group: 
-    - :default
-    version: ">= 0"
-  rake: 
-    group: 
-    - :test
-    version: ">= 0"
-  rspec: 
-    group: 
-    - :test
-    version: ">= 2.0.0.beta.8"
-  dm-core: 
-    group: 
-    - :default
-    version: ">= 0"
-  json: 
-    group: 
-    - :default
-    version: ">= 0"
-  dm-sqlite-adapter: 
-    group: 
-    - :default
-    version: ">= 0"
-  daemons: 
-    group: 
-    - :default
-    version: ">= 0"
-  chronic: 
-    group: 
-    - :default
-    version: ">= 0"
-  railsless-deploy: 
-    group: 
-    - :default
-    version: ">= 0"
-  i18n: 
-    group: 
-    - :default
-    version: ">= 0"
-  dm-migrations: 
-    group: 
-    - :default
-    version: ">= 0"
-  capistrano: 
-    group: 
-    - :default
-    version: ">= 0"
-  do_sqlite3: 
-    group: 
-    - :default
-    version: ">= 0"
-specs: 
-- rake: 
-    version: 0.8.7
-- activesupport: 
-    version: 3.0.3
-- addressable: 
-    version: 2.2.2
-- highline: 
-    version: 1.6.1
-- net-ssh: 
-    version: 2.0.23
-- net-scp: 
-    version: 1.0.4
-- net-sftp: 
-    version: 2.0.5
-- net-ssh-gateway: 
-    version: 1.0.1
-- capistrano: 
-    version: 2.5.19
-- chronic: 
-    version: 0.3.0
-- columnize: 
-    version: 0.3.2
-- daemons: 
-    version: 1.1.0
-- data_objects: 
-    version: 0.10.2
-- diff-lcs: 
-    version: 1.1.2
-- extlib: 
-    version: 0.9.15
-- dm-core: 
-    version: 1.0.2
-- dm-do-adapter: 
-    version: 1.0.2
-- dm-migrations: 
-    version: 1.0.2
-- do_sqlite3: 
-    version: 0.10.2
-- dm-sqlite-adapter: 
-    version: 1.0.2
-- eventmachine: 
-    version: 0.12.10
-- multipart-post: 
-    version: 1.0.1
-- rack: 
-    version: 1.2.1
-- faraday: 
-    version: 0.5.3
-- i18n: 
-    version: 0.4.2
-- json: 
-    version: 1.4.6
-- linecache: 
-    version: "0.43"
-- mime-types: 
-    version: "1.16"
-- railsless-deploy: 
-    version: 1.0.2
-- roauth: 
-    version: 0.0.3
-- rspec-core: 
-    version: 2.1.0
-- rspec-expectations: 
-    version: 2.1.0
-- rspec-mocks: 
-    version: 2.1.0
-- rspec: 
-    version: 2.1.0
-- ruby-debug-base: 
-    version: 0.10.4
-- ruby-debug: 
-    version: 0.10.4
-- twitter-stream: 
-    version: 0.1.10
-- tinder: 
-    version: 1.4.2
-hash: a9ed533f09a3b82ed53f39f149313f96181408fc
-sources: 
-- Rubygems: 
-    uri: http://gemcutter.org
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.0.4)
+    addressable (2.2.4)
+    capistrano (2.5.19)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.0.0)
+    chronic (0.3.0)
+    columnize (0.3.2)
+    daemons (1.1.0)
+    data_objects (0.10.3)
+      addressable (~> 2.1)
+    diff-lcs (1.1.2)
+    dm-core (1.0.2)
+      addressable (~> 2.2)
+      extlib (~> 0.9.15)
+    dm-do-adapter (1.0.2)
+      data_objects (~> 0.10.2)
+      dm-core (~> 1.0.2)
+    dm-migrations (1.0.2)
+      dm-core (~> 1.0.2)
+    dm-sqlite-adapter (1.0.2)
+      dm-do-adapter (~> 1.0.2)
+      do_sqlite3 (~> 0.10.2)
+    do_sqlite3 (0.10.3)
+      data_objects (= 0.10.3)
+    eventmachine (0.12.10)
+    extlib (0.9.15)
+    faraday (0.5.6)
+      addressable (~> 2.2.4)
+      multipart-post (~> 1.1.0)
+      rack (>= 1.1.0, < 2)
+    highline (1.6.1)
+    i18n (0.5.0)
+    json (1.5.1)
+    linecache (0.43)
+    mime-types (1.16)
+    multipart-post (1.1.0)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.1.0)
+    net-ssh-gateway (1.0.1)
+      net-ssh (>= 1.99.1)
+    rack (1.2.1)
+    railsless-deploy (1.0.2)
+    rake (0.8.7)
+    roauth (0.0.3)
+    rspec (2.5.0)
+      rspec-core (~> 2.5.0)
+      rspec-expectations (~> 2.5.0)
+      rspec-mocks (~> 2.5.0)
+    rspec-core (2.5.1)
+    rspec-expectations (2.5.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.5.0)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4)
+      linecache (>= 0.3)
+    tinder (1.4.3)
+      activesupport
+      eventmachine
+      faraday (~> 0.5.1)
+      mime-types
+      multipart-post
+      twitter-stream
+    twitter-stream (0.1.10)
+      eventmachine (>= 0.12.8)
+      roauth (>= 0.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  capistrano
+  chronic
+  daemons
+  data_objects
+  dm-core
+  dm-migrations
+  dm-sqlite-adapter
+  do_sqlite3
+  i18n
+  json
+  railsless-deploy
+  rake
+  rspec (>= 2.0.0.beta.8)
+  ruby-debug
+  tinder
