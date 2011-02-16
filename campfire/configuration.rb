@@ -16,17 +16,15 @@ module Campfire
       self.subdomain = data[:subdomain]
       self.room      = data[:room]
       self.verbose   = data[:verbose] || false
-      self.ssl       = data[:ssl]
       self.datauri   = data[:datauri]
       self.logger    = data[:logger] || data[:logfile] || Logger.new(STDOUT)
     end
 
     public
 
-    attr_accessor :api_token, :subdomain, :room, :verbose, :ssl, :datauri, :logger
+    attr_accessor :api_token, :subdomain, :room, :verbose, :datauri, :logger
 
     alias_method :verbose?, :verbose
-    alias_method :ssl?, :ssl
 
     def logger=(logger)
       logger = Logger.new(logger) unless logger.is_a?(Logger)
