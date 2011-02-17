@@ -76,7 +76,7 @@ module Campfire
         paths.each do |path|
           begin
             path.match(/(.*?)\.rb$/) && (require $1)
-          rescue Exception => ex
+          rescue Exception => e
             $stderr.puts "Unable to load #{path}: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
           end
         end
