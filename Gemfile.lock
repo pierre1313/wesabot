@@ -11,6 +11,7 @@ GEM
       net-ssh-gateway (>= 1.0.0)
     chronic (0.3.0)
     columnize (0.3.2)
+    crack (0.1.8)
     daemons (1.1.0)
     data_objects (0.10.3)
       addressable (~> 2.1)
@@ -35,6 +36,8 @@ GEM
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
     highline (1.6.1)
+    httparty (0.6.1)
+      crack (= 0.1.8)
     i18n (0.5.0)
     json (1.5.1)
     linecache (0.43)
@@ -87,6 +90,7 @@ DEPENDENCIES
   dm-migrations
   dm-sqlite-adapter
   do_sqlite3
+  httparty
   i18n
   json
   railsless-deploy
