@@ -18,14 +18,14 @@ module Campfire
     def run
       # set up a heartbeat thread for plugins that want them
       Thread.new do
-        while true
+        loop do
           plugins.each {|p| p.heartbeat if p.respond_to?(:heartbeat)}
           sleep HEARTBEAT_INTERVAL
         end
       end
 
       logger.debug "listening..."
-      room.listen(:on_error => proc {|e| logger.error "Crap: #{e.message}" }) do |message|
+      room.listen do |message|
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
         process(message)
