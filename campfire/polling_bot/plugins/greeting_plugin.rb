@@ -6,15 +6,15 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
   def process(message)
     wants_greeting = wants_greeting?(message.person_full_name)
-    if message.kind_of?(Campfire::EnterMessage) && wants_greeting
-      msg = "Hey #{message.person.downcase}."
-      if link = catch_up_link(message.person_full_name)
-        msg += " Catch up: #{link}"
+    if message.kind_of?(Campfire::EnterMessage)
+      link = catch_up_link(message.person_full_name)
+      futures = future_messages(message.person_full_name, message.person)
+      if wants_greeting
+        msg = "Hey #{message.person.downcase}."
+        msg += " Catch up: #{link}" if link
+        bot.say(msg)
       end
-      bot.say(msg)
-      future_messages(message.person_full_name, message.person).each do |future_message|
-        bot.say(future_message)
-      end
+      futures.each{|m| bot.say(m) }
     elsif message.kind_of?(Campfire::TextMessage)
       case message.command
       when /(disable|turn off) greetings/i
@@ -112,11 +112,13 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   def wants_greeting?(person)
     unless @wants_greeting
       @wants_greeting = {}
-      GreetingSetting.all.each { |setting| @wants_greeting[setting.person] = setting.wants_greeting }
+      GreetingSetting.all.each do |setting|
+        @wants_greeting[setting.person] = setting.wants_greeting
+      end
     end
 
     if @wants_greeting[person].nil?
-      GreetingSetting.create(:person => person, :wants_greeting => true)
+      GreetingSetting.create(:person => person, :wants_greeting => false)
       @wants_greeting[person] = true
     end
 
