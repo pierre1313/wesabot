@@ -33,8 +33,7 @@ module Campfire
 
     rescue Exception => e # leave the room if we crash
       unless e.kind_of?(SystemExit)
-        # get the full stack trace...none of this shortened bullshit
-        logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+        log_error(e)
         room.leave
         exit 1
       end
@@ -48,12 +47,17 @@ module Campfire
       end
 
       plugins.each do |plugin|
-        if plugin.accepts?(message)
-          logger.debug "sending to plugin #{plugin} (priority #{plugin.priority})"
-          if plugin.process(message) == Plugin::HALT
-            logger.debug "plugin chain halted"
-            break
+        begin
+          if plugin.accepts?(message)
+            logger.debug "sending to plugin #{plugin} (priority #{plugin.priority})"
+            status = plugin.process(message)
+            if status == Plugin::HALT
+              logger.debug "plugin chain halted"
+              break
+            end
           end
+        rescue Exception => e
+          log_error(e)
         end
       end
     end
@@ -63,6 +67,10 @@ module Campfire
       if m = message.body.match(/^\b#{name}[,:]\s*(.*)/i) || message.body.match(/^\s*(.*?)[,]?\b#{name}[.!?\s]*$/i)
         message.command = m[1]
       end
+    end
+
+    def log_error(e)
+      logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
     end
   end
 end
