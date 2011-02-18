@@ -30,7 +30,7 @@ class StatusPlugin < Campfire::PollingBot::Plugin
       return HALT
     end
 
-    return unless message.addressed_to_me?
+    return nil unless message.addressed_to_me?
 
     case message.command
     when /(?:set\s+)?(?:my\s+)?status(?:\s+is|\s+to)(?:\s*:)?\s*(.+)/i
@@ -50,6 +50,8 @@ class StatusPlugin < Campfire::PollingBot::Plugin
       end
       return HALT
     end
+
+    return nil
   end
 
   def help
