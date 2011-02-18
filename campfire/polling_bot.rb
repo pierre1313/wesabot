@@ -29,6 +29,7 @@ module Campfire
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
         process(message)
+        logger.debug "done processing #{message}"
       end
 
     rescue Exception => e # leave the room if we crash
