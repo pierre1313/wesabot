@@ -5,15 +5,15 @@ class ReloadPlugin < Campfire::PollingBot::Plugin
   def process(message)
     case message.command
     when /^reload/i
-      bot.say("Updating and restarting...")
+      bot.say("k")
       system("git pull origin master")
-      exec $0
+      exec *INVOCATION
       return HALT
     end
   end
 
   # return array of available commands and descriptions
   def help
-    [['reload', "update and reload Wes"]]
+    [['reload', "update and reload #{bot.name}"]]
   end
 end

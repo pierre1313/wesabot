@@ -5,6 +5,9 @@ require 'openssl'
 # get the real path of this file so we can load the library
 file = Pathname.new(__FILE__).realpath
 
+# save the original invocation so we can restart ourselves later
+INVOCATION = [file.to_s, *ARGV]
+
 # chdir to this project's directory so bundler will be able to find
 # the .bundle directory itself
 oldpwd = Dir.pwd
