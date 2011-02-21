@@ -18,11 +18,12 @@ module Campfire
       self.verbose   = data[:verbose] || false
       self.datauri   = data[:datauri]
       self.logger    = data[:logger] || data[:logfile] || Logger.new(STDOUT)
+      self.google_api_key = data[:google_api_key]
     end
 
     public
 
-    attr_accessor :api_token, :subdomain, :room, :verbose, :datauri, :logger
+    attr_accessor :api_token, :subdomain, :room, :verbose, :datauri, :logger, :google_api_key
 
     alias_method :verbose?, :verbose
 
