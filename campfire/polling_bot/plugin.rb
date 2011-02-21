@@ -20,6 +20,8 @@ module Campfire
         filepath = File.dirname(__FILE__) + "/plugins/config/#{name}.yml"
         if File.exists?(filepath)
           self.config = YAML.load_file(filepath)
+        else
+          self.config = {}
         end
       end
 
