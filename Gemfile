@@ -14,6 +14,7 @@ gem "daemons"
 gem "i18n"
 gem "httparty"
 gem "google-search"
+gem "yajl-ruby"
 
 group :test do
   gem "rspec", ">= 2.0.0.beta.8"

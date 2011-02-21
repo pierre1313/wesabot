@@ -2,6 +2,10 @@
 require 'campfire/bot'
 require 'campfire/message'
 
+require 'yajl/gzip'
+require 'yajl/deflate'
+require 'yajl/http_stream'
+
 module Campfire
   class PollingBot < Bot
     require 'campfire/polling_bot/plugin'
@@ -74,5 +78,12 @@ module Campfire
     def log_error(e)
       logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
     end
+
+    def yajl_stream(&block)
+      url = URI.parse("http://#{config.api_token}:x@streaming.campfirenow.com" +
+        "/room/#{room.id}/live.json")
+      Yajl::HttpStream.get(url, :symbolize_keys => true){|m| yield m }
+    end
+
   end
 end

@@ -79,6 +79,7 @@ GEM
     twitter-stream (0.1.10)
       eventmachine (>= 0.12.8)
       roauth (>= 0.0.2)
+    yajl-ruby (0.7.8)
 
 PLATFORMS
   ruby
@@ -101,3 +102,4 @@ DEPENDENCIES
   rspec (>= 2.0.0.beta.8)
   ruby-debug
   tinder
+  yajl-ruby
