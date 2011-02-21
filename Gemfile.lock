@@ -35,6 +35,8 @@ GEM
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
+    google-search (1.0.2)
+      json
     highline (1.6.1)
     httparty (0.6.1)
       crack (= 0.1.8)
@@ -90,6 +92,7 @@ DEPENDENCIES
   dm-migrations
   dm-sqlite-adapter
   do_sqlite3
+  google-search
   httparty
   i18n
   json

@@ -1,4 +1,5 @@
 require 'httparty'
+require 'google-search'
 
 # plugin to send a tweet to a Twitter account
 class ImageSearchPlugin < Campfire::PollingBot::Plugin
@@ -6,15 +7,23 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
 
   def process(message)
+    searched = false
+
     case message.command
+    when /(google|flickr)\sfor\sa\s(?:photo|image|picture)\s+of:?\s+(?:a:?\s+)?\s*("?)(.*?)\1$/i
+      photo = next_photo($3, $1)
+      searched = true
     when /(?:photo|image|picture)\s+of:?\s+(?:a:?\s+)?\s*("?)(.*?)\1$/i
-      subject = $2
-      if photo_links = query_flickr(subject)
-        if photo_links.empty?
-          bot.say("Couldn't find anything for \"#{subject}\"")
-        else
-          bot.say_random(photo_links)
-        end
+      photo = next_photo($2)
+      searched = true
+    end
+
+    if searched
+      if photo
+        DisplayedImage.create(:uri => photo)
+        bot.say(photo)
+      else
+        bot.say("Couldn't find anything for \"#{subject}\"")
       end
       return HALT
     end
@@ -22,12 +31,48 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
 
   # return array of available commands and descriptions
   def help
-    [['(photo|image|picture) of <subject>', "find a random picture on flickr of <subject>"]]
+    [
+      ['(photo|image|picture) of <subject>', "find a new picture of <subject>"],
+      ['search (google|flickr) for a (photo|image|picture) of <subject>', "search the stated service for a new picture of <subject>"]
+    ]
   end
 
-  private
+private
 
-  # post a message to twitter
+  def next_photo(subject, sources = %w(google flickr))
+    next_photo = nil
+
+    if sources.include?("google")
+      # google search lazy-fetches pages of results, so we only search as far as we have to
+      next_photo ||= query_google(subject).find{|i| !DisplayedImage.first(:uri => i.uri) }.uri
+    end
+
+    if sources.include?("flickr")
+      next_photo ||= query_flickr(subject).find{|u| !DisplayedImage.first(:uri => u) }
+    end
+
+    return next_photo
+  end
+
+  def query_google(subject)
+    unless bot.config.google_api_key
+      bot.say("I don't have a Google Search API key. " +
+        "Please add it to my config with the key 'google_api_key'.")
+      return []
+    end
+
+    logger.debug("Searching Google Images for #{subject}")
+    results = Google::Search::Image.new(
+      :query => subject,
+      :api_key => bot.config.google_api_key,
+      :image_type => :photo,
+      :safety_level => :off
+    )
+
+    logger.debug("Got response #{results.inspect}")
+    return results || []
+  end
+
   def query_flickr(subject)
     options = {:query => {:q => "select * from flickr.photos.search where text=\"#{subject}\""} }
     logger.debug("YQL query #{options[:query][:q]}")

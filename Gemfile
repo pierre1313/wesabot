@@ -13,6 +13,7 @@ gem "json"
 gem "daemons"
 gem "i18n"
 gem "httparty"
+gem "google-search"
 
 group :test do
   gem "rspec", ">= 2.0.0.beta.8"
