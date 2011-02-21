@@ -16,6 +16,7 @@ module Campfire
         raise # maybe do some friendlier error handling later
       end
       room.join
+      say("hey guys")
     end
 
     def base_uri
