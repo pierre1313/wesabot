@@ -25,9 +25,11 @@ module Campfire
       end
 
       logger.debug "listening..."
+
       room.listen do |message|
         klass = Campfire.const_get(message[:type])
         message = klass.new(message)
+        logger.debug "processing #{message} (#{message.person} - #{message.body})"
         process(message)
         logger.debug "done processing #{message}"
       end
@@ -41,7 +43,6 @@ module Campfire
     end
 
     def process(message)
-      logger.debug "processing #{message} (#{message.person} - #{message.body})"
       if message.person == self.name || message.person_full_name == self.name
         # ignore messages from ourself
         return
