@@ -1,2 +1,2 @@
-.bundle
-wesabot.yml
+config/*.yml
+src/*
