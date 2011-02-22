@@ -6,32 +6,17 @@ class HelpPlugin < Campfire::PollingBot::Plugin
   def process(message)
     person = message.person
     case message.command
-    when /help(?: (.*))?/i
-      bot.say("Oh, too lazy to look at the damn source code? Fine:")
-      help_msg = ''
-      help = {}
-
-      bot.plugins.each do |plugin|
-        begin
-          help[plugin.to_s] = plugin.help if plugin.respond_to?(:help)
-        rescue Exception => e
-          logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
-        end
-      end
-
+    when /help(?:\s(.*))?/i
       if $1
         name = $1
-        plugin = help.keys.find{|k| k =~ /#{name}(plugin)?/i }
-        help = { plugin => help[plugin] } if plugin
+        plugin = plugin_helps.keys.find do |k|
+          k =~ /(#{name}|#{name.gsub(/s$/i, '')})(plugin)?/i
+        end
+        matched_helps = { plugin => plugin_helps[plugin] } if plugin
       end
+      matched_helps ||= plugin_helps
 
-      help.keys.sort.each do |plugin|
-        help_msg << "#{plugin}:\n"
-        help[plugin].each { |command, description| help_msg << " - #{command}\n     #{description}\n" }
-        help_msg << "\n"
-      end
-
-      bot.paste(help_msg)
+      bot.paste msg_for(matched_helps)
       return HALT
     end
   end
@@ -40,4 +25,37 @@ class HelpPlugin < Campfire::PollingBot::Plugin
   def help
     [['help', "this message"]]
   end
+
+protected
+
+  def plugin_helps
+    @plugin_helps ||= begin
+      help = {}
+
+      bot.plugins.each do |plugin|
+        begin
+          help[plugin.to_s] = plugin.help if plugin.respond_to?(:help)
+        rescue Exception => e
+          bot.log_error(e)
+        end
+      end
+
+      help
+    end
+  end
+
+  def msg_for(help)
+    help_msg = ''
+
+    help.keys.sort.each do |plugin|
+      help_msg << "#{plugin}:\n"
+      help[plugin].each do |command, description|
+        help_msg << " - #{command}\n     #{description}\n"
+      end
+      help_msg << "\n"
+    end
+
+    help_msg
+  end
+
 end
