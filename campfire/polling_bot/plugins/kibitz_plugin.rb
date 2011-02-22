@@ -39,6 +39,15 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
         "yeah... er, what was I saying?",
         "she really is incredibly hot, you know",
       ]
+    when /goodnight|g'night|night|bye|see you/
+      bot.say_random [
+        "see you later, #{person}",
+        "later, #{person}",
+        "night",
+        "goodnight",
+        "bye",
+        "have a good night"
+      ]
     else
       bot.say_random [
         "I have no idea what you're talking about, #{person}.",
