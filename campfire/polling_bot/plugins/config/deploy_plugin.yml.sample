@@ -1,6 +1,9 @@
 # config file for DeployPlugin
-repository_base_path: /src
+# sites are expected to have a file at /REVISION
+# containing the git sha of the deployed revision
+repository_base_path: src
 default_project: my_super_site
-project:
+projects:
   my_super_site:
-    deployed_revision_url: http://www.example.com/REVISION
+    url: www.example.com
+    staging: staging.example.com

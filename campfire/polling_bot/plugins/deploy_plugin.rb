@@ -1,11 +1,14 @@
+require 'open-uri'
+
 # Plugin to get a list of commits that are on deck to be deployed
 class DeployPlugin < Campfire::PollingBot::Plugin
   accepts :text_message, :addressed_to_me => true
 
   def process(message)
     case message.command
-    when /on deck(?: for ([^\s\?]+))?/
-      project = $1
+    when /on deck(?: for ([^\s\?]+)( staging)?)?/
+      project, staging = $1, $2
+      name = staging ? "#{project} staging" : project
 
       if not projects.any?
         bot.say("Sorry #{message.person}, I don't know about any projects. Please configure the deploy plugin.")
@@ -22,28 +25,28 @@ class DeployPlugin < Campfire::PollingBot::Plugin
 
       info = project_info(project)
       if info.nil?
-        bot.say("Sorry #{message.person}, I don't know anything about #{project}. Here are the projects I do know about:")
+        bot.say("Sorry #{message.person}, I don't know anything about #{name}. Here are the projects I do know about:")
         bot.paste(projects.keys.sort.join("\n"))
         return HALT
       end
 
       range = nil
       begin
-        range = "#{deployed_revision(project)}..HEAD"
+        range = "#{deployed_revision(project, staging)}..HEAD"
         logger.debug "asking for shortlog in range #{range}"
         shortlog = project_shortlog(project, range)
       rescue => e
-        bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{project}, got a #{e.class}:")
-        bot.paste("#{e.message}\n\n#{e.backtrace.map{|l| "  #{l}\n"}}")
+        bot.log_error(e)
+        bot.say("Sorry #{message.person}, I couldn't get what's on deck for #{name}.")
         return HALT
       end
 
       if shortlog.nil? || shortlog =~ /\A\s*\Z/
-        bot.say("There's nothing on deck for #{project} right now.")
+        bot.say("There's nothing on deck for #{name} right now.")
         return HALT
       end
 
-      bot.say("Here's what's on deck for #{project}:")
+      bot.say("Here's what's on deck for #{name}:")
       bot.paste("$ git shortlog #{range}\n\n#{shortlog}")
 
       return HALT
@@ -51,13 +54,18 @@ class DeployPlugin < Campfire::PollingBot::Plugin
   end
 
   def help
-    help_lines = [["what's on deck for <project>?", "get the shortlog of to-be-deployed changes for a specific project"]]
-    help_lines << ["what's on deck?", "get shortlog of to-be-deployed changes for #{default_project}"] unless default_project.nil?
+    help_lines = [
+      ["what's on deck for <project>?", "shortlog of changes not yet deployed to production"],
+      ["what's on deck for <project> staging?", "shortlog of changes not yet deployed to staging"],
+    ]
+    if default_project
+      help_lines << ["what's on deck?", "shortlog of changes not yet deployed to #{default_project}"]
+    end
     return help_lines
   end
 
   def projects
-    (config && config['project']) || {}
+    (config && config['projects']) || {}
   end
 
   def default_project
@@ -74,21 +82,33 @@ class DeployPlugin < Campfire::PollingBot::Plugin
   def project_shortlog(project, treeish)
     info = project_info(project)
     return nil if info.nil?
-    result = %x{ cd #{repository_path(project)}; git shortlog #{treeish} }
+
+    dir = repository_path(project)
+    cmd = "git shortlog #{treeish}"
+    out = Dir.chdir(dir) do
+      # don't want output from the pull
+      system("git pull")
+      `#{cmd}`
+    end
+
     if $?.exitstatus.zero?
-      return result
+      return out
     else
-      raise "got non-zero exit status from git shortlog: #{$?.exitstatus}"
+      raise "attempt to run `#{cmd}` in #{dir} failed with status #{$?.exitstatus}\n#{out}"
     end
   end
 
-  def deployed_revision(project)
+  def deployed_revision(project, staging = false)
     info = project_info(project)
     return nil if info.nil?
-    return bot.get_content(info["deployed_revision_url"])
+
+    host = staging ? info['staging'] : info['url']
+    return nil if host.nil?
+
+    return open("http://#{host}/REVISION").read.chomp
   end
 
   def repository_path(project)
-    File.join(config["repository_base_path"], "#{project}.git")
+    File.expand_path File.join(config["repository_base_path"], "#{project}")
   end
 end
