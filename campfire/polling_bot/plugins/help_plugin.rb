@@ -30,32 +30,24 @@ protected
 
   def plugin_helps
     @plugin_helps ||= begin
-      help = {}
-
-      bot.plugins.each do |plugin|
+      help = bot.plugins.map do |plugin|
         begin
-          help[plugin.to_s] = plugin.help if plugin.respond_to?(:help)
+          [plugin.to_s, plugin.help] if plugin.respond_to?(:help)
         rescue Exception => e
           bot.log_error(e)
         end
-      end
-
-      help
+      end.compact
+      Hash[help]
     end
   end
 
   def msg_for(help)
-    help_msg = ''
-
-    help.keys.sort.each do |plugin|
-      help_msg << "#{plugin}:\n"
-      help[plugin].each do |command, description|
-        help_msg << " - #{command}\n     #{description}\n"
-      end
-      help_msg << "\n"
-    end
-
-    help_msg
+    help.keys.sort.map do |plugin|
+      cmds = help[plugin].map do |command, description|
+        " - #{command}\n     #{description}\n"
+      end.join
+      "#{plugin}:\n" + cmds
+    end.join("\n")
   end
 
 end
