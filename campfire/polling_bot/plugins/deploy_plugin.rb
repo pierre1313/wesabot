@@ -6,6 +6,45 @@ class DeployPlugin < Campfire::PollingBot::Plugin
 
   def process(message)
     case message.command
+    when /deploy\s([^\s\!]+)(?:(?: to)? (staging|nine|production))?( with migrations)?/
+      project, env, migrate = $1, $2, $3
+      name = env ? "#{project} #{env}" : project
+      env ||= "production"
+
+      if not projects.any?
+        bot.say("Sorry #{message.person}, I don't know about any projects. Please configure the deploy plugin.")
+        return HALT
+      end
+
+      project ||= default_project
+      if project.nil?
+        bot.say("Sorry #{message.person}, I don't have a default project. Here are the projects I do know about:")
+        bot.paste(projects.keys.sort.join("\n"))
+        return HALT
+      end
+      project.downcase!
+
+      info = project_info(project)
+      if info.nil?
+        bot.say("Sorry #{message.person}, I don't know anything about #{name}. Here are the projects I do know about:")
+        bot.paste(projects.keys.sort.join("\n"))
+        return HALT
+      end
+
+      bot.say("Okay, trying to deploy #{name}...")
+
+      begin
+        deploy = migrate ? "deploy:migrations" : "deploy"
+        git(project, "bundle exec cap #{env} #{deploy}")
+      rescue => e
+        bot.log_error(e)
+        bot.say("Sorry #{message.person}, I couldn't deploy #{name}.")
+        return HALT
+      end
+
+      bot.say("Done.")
+      return HALT
+
     when /on deck(?: for ([^\s\?]+)( staging)?)?/
       project, staging = $1, $2
       name = staging ? "#{project} staging" : project
@@ -73,7 +112,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
       (projects.size == 1 ? projects.keys.first : nil)
   end
 
-  private
+private
 
   def project_info(project)
     projects[project]
@@ -83,19 +122,7 @@ class DeployPlugin < Campfire::PollingBot::Plugin
     info = project_info(project)
     return nil if info.nil?
 
-    dir = repository_path(project)
-    cmd = "git shortlog #{treeish}"
-    out = Dir.chdir(dir) do
-      # don't want output from the pull
-      system("git pull")
-      `#{cmd}`
-    end
-
-    if $?.exitstatus.zero?
-      return out
-    else
-      raise "attempt to run `#{cmd}` in #{dir} failed with status #{$?.exitstatus}\n#{out}"
-    end
+    return git(project, "git shortlog #{treeish}")
   end
 
   def deployed_revision(project, staging = false)
@@ -110,5 +137,20 @@ class DeployPlugin < Campfire::PollingBot::Plugin
 
   def repository_path(project)
     File.expand_path File.join(config["repository_base_path"], "#{project}")
+  end
+
+  def git(project, cmd)
+    dir = repository_path(project)
+    out = Dir.chdir(dir) do
+      # don't want output from the pull
+      system("git pull")
+      `#{cmd}`
+    end
+
+    unless $?.exitstatus.zero?
+      raise "attempt to run `#{cmd}` in #{dir} failed with status #{$?.exitstatus}\n#{out}"
+    end
+
+    return out
   end
 end
