@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/indirect/firering.git
-  revision: b92a1bc511e51ad4d2fe693824f09493c3eb7c88
+  revision: a941aae0aaa5d5d68e585ed7ba8b26d1107d2270
   specs:
     firering (1.0.3)
       em-http-request (>= 0.2.10)
