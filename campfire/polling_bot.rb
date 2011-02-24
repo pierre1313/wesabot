@@ -26,9 +26,12 @@ module Campfire
         end
       end
 
-      logger.debug "listening..."
       host = "https://#{config.subdomain}.campfirenow.com"
-      conn = Firering::Connection.new(host) {|c| c.token = config.api_token }
+      conn = Firering::Connection.new(host) do |c|
+        c.token = config.api_token
+        c.logger = logger
+      end
+
       EM.run do
         conn.room(room.id) do |room|
           room.stream do |data|
