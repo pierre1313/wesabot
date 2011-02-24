@@ -14,7 +14,7 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
       bot.say("#{$1} #{person}")
     when /(^later|(?:good\s*)?bye)/i
       bot.say("#{$1} #{person}")
-    when /you rock/i, /awesome/i, /cool/i
+    when /you rock|awesome|cool/i
       sayings = ["Thanks, #{person}, you're pretty cool yourself.",
                  "I try.",
                  "Aw, shucks. Thanks, #{person}."]
@@ -32,14 +32,7 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
       ]
     when /thanks|thank you/i
       bot.say_random ["No problem.", "np", "any time", "that's what I'm here for", "You're welcome."]
-    when /jessica alba/i
-      bot.say_random [
-        "Jessica Alba is my dream girl",
-        "no question, the hottest girl ever",
-        "yeah... er, what was I saying?",
-        "she really is incredibly hot, you know",
-      ]
-    when /good\s?night|g'?night/
+    when /^(good\s?night|g'?night)$/
       bot.say_random [
         "see you later, #{person}",
         "later, #{person}",
@@ -48,7 +41,7 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
         "bye",
         "have a good night"
       ]
-    when /bye|see you(?: later)?/
+    when /^(see you(?: later)?)$/
       bot.say_random [
         "see you later, #{person}",
         "later, #{person}",
