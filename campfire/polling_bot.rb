@@ -2,6 +2,7 @@
 require 'campfire/bot'
 require 'campfire/message'
 
+require 'firering'
 
 module Campfire
   class PollingBot < Bot
@@ -26,13 +27,33 @@ module Campfire
       end
 
       logger.debug "listening..."
+      host = "https://#{config.subdomain}.campfirenow.com"
+      conn = Firering::Connection.new(host) {|c| c.token = config.api_token }
+      EM.run do
+        conn.room(room.id) do |room|
+          room.stream do |data|
 
-      room.listen do |message|
-        klass = Campfire.const_get(message[:type])
-        message = klass.new(message)
-        logger.debug "processing #{message} (#{message.person} - #{message.body})"
-        process(message)
-        logger.debug "done processing #{message}"
+            begin
+              klass = Campfire.const_get(data.type)
+              message = klass.new(data)
+
+              if data.from_user?
+                data.user do |user|
+                  message.person_full_name = user.name
+                  process(message)
+                end
+              else
+                process(message)
+              end
+
+            rescue => e
+              log_error(e)
+            end
+
+          end
+        end
+
+        trap("INT") { EM.stop }
       end
 
     rescue Exception => e # leave the room if we crash
@@ -44,10 +65,10 @@ module Campfire
     end
 
     def process(message)
-      if message.person == self.name || message.person_full_name == self.name
-        # ignore messages from ourself
-        return
-      end
+      logger.debug "processing #{message} (#{message.person} - #{message.body})"
+
+      # ignore messages from ourself
+      return if [message.person, message.person_full_name].include? self.name
 
       plugins.each do |plugin|
         begin
@@ -63,6 +84,8 @@ module Campfire
           log_error(e)
         end
       end
+
+      logger.debug "done processing #{message}"
     end
 
     # determine if a message is addressed to the bot. if so, store the command in the message
