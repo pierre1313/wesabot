@@ -13,6 +13,8 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
         "yeah... er, what was I saying?",
         "she really is incredibly hot, you know",
       ]
+    when /^(goodnight|night)(,?\s(all|every(body|one)))?$/
+      bot.say "goodnight, #{person}"
     when /^(facepalm|EFACEPALM|:fp|:facepalm:|\*facepalm\*|m\()$/i
       bot.say_random [
         # picard facepalm
