@@ -33,6 +33,14 @@ module Campfire
       say(sayings[rand(sayings.size)])
     end
 
+    # return a random person out of the list of users logged in to this room
+    def other_person(exclude = nil)
+      # don't choose the excluded person or ourself
+      options = room.users.reject{|u| u[:name] =~ /^(#{exclude}|#{self.name})/ }
+      # return the other person's first name, or nil if we didn't find one
+      options.any? ? options[rand(options.size)][:name].split(' ').first : nil
+    end
+
     def logger
       config.logger
     end
