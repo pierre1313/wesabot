@@ -7,7 +7,9 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
     person = message.person
     case message.command
     when /^\s*$/
-      bot.say(person)
+      # question questioners, exclaim at exclaimers
+      message.body.match(/(\?|\!)$/)
+      bot.say(person + $1.to_s)
     when /say\s+(.*)/
       bot.say($1)
     when /^(hey|hi|hello|sup|howdy)/i
