@@ -30,8 +30,8 @@ module Campfire
       conn = Firering::Connection.new(host) do |c|
         c.token = config.api_token
         c.logger = logger
-        c.max_retries = 30
-        c.retry_delay = 10
+        c.max_retries = 15
+        c.retry_delay = 2
       end
 
       EM.run do
