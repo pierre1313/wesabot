@@ -13,7 +13,7 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
         "yeah... er, what was I saying?",
         "she really is incredibly hot, you know",
       ]
-    when /^(goodnight|night)(,?\s(all|every(body|one)))?$/
+    when /^(goodnight|night)(,?\s(all|every(body|one)))?$/i
       bot.say "goodnight, #{person}"
     when /^(facepalm|EFACEPALM|:fp|:facepalm:|\*facepalm\*|m\()$/i
       bot.say_random [
@@ -28,12 +28,15 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^i see your problem/i
       # pony mechanic
       bot.say "https://img.skitch.com/20110224-8fmfwdmg6kkrcpijhamhqu7tm6.jpg"
-    when /^(wfm|works for me)$/
+    when /^(wfm|works for me)$/i
       # works on my machine
       bot.say "https://img.skitch.com/20110224-jrcf6e4gc936a2mxc3mueah2in.png"
-    when /^(stacktrace or gtfo|stacktrace or it didn't happen|stacktrace!)$/
+    when /^(stacktrace or gtfo|stacktrace or it didn't happen|stacktrace!)$/i
       # stacktrace or gtfo
       bot.say "https://img.skitch.com/20110224-pqtmiici9wp9nygqi4nw8gs6hg.png"
+    when /^this is sparta\!*?$/
+      # this is sparta
+      bot.say "https://img.skitch.com/20110225-k9xpadr2hk37pe5ed4crcqria1.png"
     end
   end
 
