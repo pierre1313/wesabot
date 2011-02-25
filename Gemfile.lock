@@ -1,11 +1,11 @@
 GIT
   remote: git://github.com/indirect/firering.git
-  revision: a941aae0aaa5d5d68e585ed7ba8b26d1107d2270
+  revision: 469a56042d165e457e71fd882e01e5d0f5101b15
   specs:
-    firering (1.0.3)
-      em-http-request (>= 0.2.10)
-      eventmachine (>= 0.12.10)
-      yajl-ruby (>= 0.7.6)
+    firering (1.0.4)
+      em-http-request (~> 0.3.0)
+      eventmachine (~> 0.12.10)
+      yajl-ruby (~> 0.7.6)
 
 GEM
   remote: http://rubygems.org/
@@ -93,7 +93,7 @@ GEM
     twitter-stream (0.1.10)
       eventmachine (>= 0.12.8)
       roauth (>= 0.0.2)
-    yajl-ruby (0.8.1)
+    yajl-ruby (0.7.9)
 
 PLATFORMS
   ruby
