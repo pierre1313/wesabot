@@ -2,7 +2,7 @@
 class HistoryPlugin < Campfire::PollingBot::Plugin
   accepts :all
   priority 100
-  
+
   def process(message)
     @room_locked ||= false
     if message.kind_of?(Campfire::LockMessage)
@@ -12,12 +12,12 @@ class HistoryPlugin < Campfire::PollingBot::Plugin
       @room_locked = false
       return
     end
-    
+
     save_message(message) unless @room_locked
   end
-  
+
   private
-  
+
   def save_message(message)
     params = {
       :room => bot.room.id,
@@ -28,6 +28,6 @@ class HistoryPlugin < Campfire::PollingBot::Plugin
       :body => message.respond_to?(:body) ? message.body : nil,
       :timestamp => message.timestamp.to_i
     }
-    Message.create(params) 
+    Message.create(params)
   end
 end

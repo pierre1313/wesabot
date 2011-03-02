@@ -44,6 +44,17 @@ module Campfire
 
               if data.from_user?
                 data.user do |user|
+                  dbuser = User.first(:campfire_id => user.id)
+
+                  if dbuser.nil?
+                    dbuser = User.create(
+                      :campfire_id => user.id,
+                      :name => user.name
+                    )
+                  else
+                    dbuser.update(:name => user.name)
+                  end
+
                   message.person_full_name = user.name
                   process(message)
                 end
