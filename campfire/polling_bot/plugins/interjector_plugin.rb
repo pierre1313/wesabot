@@ -34,7 +34,7 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^(stacktrace or gtfo|stacktrace or it didn't happen|stacktrace!)$/i
       # stacktrace or gtfo
       bot.say "https://img.skitch.com/20110224-pqtmiici9wp9nygqi4nw8gs6hg.png"
-    when /^this is sparta\!*?$/
+    when /^this is sparta\!*?$/i
       # this is sparta
       bot.say "https://img.skitch.com/20110225-k9xpadr2hk37pe5ed4crcqria1.png"
     end
