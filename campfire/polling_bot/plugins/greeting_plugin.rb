@@ -5,7 +5,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   accepts :enter_message
 
   def process(message)
-    wants_greeting = wants_greeting?(message.person_full_name)
+    user = message.user
+    wants_greeting = wants_greeting?(user)
     if message.kind_of?(Campfire::EnterMessage)
       link = catch_up_link(message.person_full_name)
       futures = future_messages(message.person_full_name, message.person)
@@ -18,16 +19,16 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     elsif message.kind_of?(Campfire::TextMessage)
       case message.command
       when /(disable|turn off) greetings/i
-        wants_greeting(message.person_full_name, false)
+        wants_greeting(user, false)
         bot.say("OK, I've disabled greetings for you, #{message.person}")
         return HALT
       when /(enable|turn on) greetings/i
-        wants_greeting(message.person_full_name, true)
+        wants_greeting(user, true)
         bot.say("OK, I've enabled greetings for you, #{message.person}")
         return HALT
       when /toggle greetings/i
-        old_setting = wants_greeting?(message.person_full_name)
-        wants_greeting(message.person_full_name, !old_setting)
+        old_setting = wants_greeting?(user)
+        wants_greeting(user, !old_setting)
         bot.say("OK, I've #{old_setting ? 'disabled' : 'enabled'} greetings for you, #{message.person}")
         return HALT
       when /catch me up|ketchup/i
@@ -109,26 +110,19 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     return future_messages
   end
 
-  def wants_greeting?(person)
-    unless @wants_greeting
-      @wants_greeting = {}
-      GreetingSetting.all.each do |setting|
-        @wants_greeting[setting.person] = setting.wants_greeting
-      end
+  def wants_greeting?(user)
+    @wants_greeting_cache ||= User.all.inject({}) do |memo, u|
+      memo.merge(u => u.wants_greeting?)
     end
 
-    if @wants_greeting[person].nil?
-      GreetingSetting.create(:person => person, :wants_greeting => true)
-      @wants_greeting[person] = true
-    end
+    user.wants_greeting = true if @wants_greeting_cache[user].nil?
 
-    return @wants_greeting[person]
+    return @wants_greeting_cache[user]
   end
 
-  def wants_greeting(person, wants_greeting)
-    setting = GreetingSetting.first(:person => person)
-    setting.update(:wants_greeting => wants_greeting)
-    @wants_greeting[person] = wants_greeting
+  def wants_greeting(user, wants_greeting)
+    user.wants_greeting = wants_greeting
+    @wants_greeting_cache[user] = wants_greeting
   end
 end
 
