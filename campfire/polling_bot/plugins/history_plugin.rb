@@ -24,6 +24,7 @@ class HistoryPlugin < Campfire::PollingBot::Plugin
       :message_id => message.message_id,
       :message_type => message.type,
       :person => message.respond_to?(:person_full_name) ? message.person_full_name : nil,
+      :user_id => message.user && message.user.id,
       :link => message.respond_to?(:link) ? message.link : nil,
       :body => message.respond_to?(:body) ? message.body : nil,
       :timestamp => message.timestamp.to_i

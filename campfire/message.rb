@@ -5,7 +5,7 @@ module Campfire
   # base message class. All messages have a message_id, timestamp, person (first name of the user generating
   # the message), person_full_name, and body, which is the text of the message
   class Message
-    attr_accessor :message_id, :timestamp, :person, :person_full_name, :body, :type
+    attr_accessor :message_id, :timestamp, :user, :person, :person_full_name, :body, :type
 
     def initialize(params)
       self.message_id = params.id
@@ -17,6 +17,11 @@ module Campfire
     def person_full_name=(name)
       @person_full_name = name
       @person = @person_full_name.split(' ').first # just get first name
+    end
+
+    def user=(user)
+      self.person_full_name = user.name
+      @user = user
     end
   end
 

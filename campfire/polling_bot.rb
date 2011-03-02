@@ -55,7 +55,7 @@ module Campfire
                     dbuser.update(:name => user.name)
                   end
 
-                  message.person_full_name = user.name
+                  message.user = dbuser
                   process(message)
                 end
               else
