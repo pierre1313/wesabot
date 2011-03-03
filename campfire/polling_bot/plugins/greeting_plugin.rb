@@ -89,7 +89,15 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
              "prayed to the god of", "ran headlong at", "checked in a timebomb for",
              "interpolated some strings TWO TIMES for", "wished upon a", "was like, oh my god",
              "went all", "tested the concept of"]
-    future_person    = Regexp.new("future #{person}", Regexp::IGNORECASE)
+
+    # future Brian/future Brian Donovan
+    names = [person_full_name, person]
+
+    # future BD
+    name_words = person_full_name.split(/\s+/)
+    names << (name_words.first[0,1]+name_words.last[0,1]) if name_words.size > 1
+
+    future_person = Regexp.new("future (#{names.join('|')})\\b", Regexp::IGNORECASE)
     future_everybody = Regexp.new("future everybody", Regexp::IGNORECASE)
 
     if message_id = last_message_id(person_full_name)
