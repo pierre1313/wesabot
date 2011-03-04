@@ -6,7 +6,7 @@ class ReloadPlugin < Campfire::PollingBot::Plugin
     case message.command
     when /^reload/i
       bot.say("k")
-      system("git pull origin master")
+      system("git pull origin master && bundle install")
       exec *INVOCATION
       return HALT
     end
