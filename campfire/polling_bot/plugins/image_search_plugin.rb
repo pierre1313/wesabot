@@ -42,7 +42,7 @@ private
   def next_photo(subject, sources = %w(google flickr))
     next_photo = nil
 
-    if sources.include?("google") && bot.config.google_api_key
+    if sources == ["google"] || (sources.include?("google") && bot.config.google_api_key)
       # google search lazy-fetches pages of results, so we only search as far as we have to
       next_photo ||= query_google(subject).find{|i| !DisplayedImage.first(:uri => i.uri) }.uri
     end
