@@ -39,9 +39,11 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^this is sparta\!*?$/i
       # this is sparta
       bot.say "https://img.skitch.com/20110225-k9xpadr2hk37pe5ed4crcqria1.png"
-    when /^i have no idea what i'm doing/i
+    when /^i have no idea what i'm doing$/i
       # I have no idea what I'm doing
       bot.say "https://img.skitch.com/20110304-1tcmatkhapiq6t51wqqq9igat5.jpg"
+    when /^party$/i
+      bot.say "https://img.skitch.com/20110309-qtd33sy8k5yrdaeqa9e119bwd1.jpg"
     end
   end
 
