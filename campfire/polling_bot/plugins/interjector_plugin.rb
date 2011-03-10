@@ -30,7 +30,7 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^i see your problem/i
       # pony mechanic
       bot.say "https://img.skitch.com/20110224-8fmfwdmg6kkrcpijhamhqu7tm6.jpg"
-    when /^(wfm|works for me)$/i
+    when /^(wfm|womm|works on my machine)$/i
       # works on my machine
       bot.say "https://img.skitch.com/20110224-jrcf6e4gc936a2mxc3mueah2in.png"
     when /^(stacktrace or gtfo|stacktrace or it didn't happen|stacktrace!)$/i
@@ -42,7 +42,7 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^i have no idea what i'm doing$/i
       # I have no idea what I'm doing
       bot.say "https://img.skitch.com/20110304-1tcmatkhapiq6t51wqqq9igat5.jpg"
-    when /^party$/i
+    when /^party[?!.]*$/i
       bot.say "https://img.skitch.com/20110309-qtd33sy8k5yrdaeqa9e119bwd1.jpg"
     end
   end
