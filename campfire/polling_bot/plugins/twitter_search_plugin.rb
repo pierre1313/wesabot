@@ -45,7 +45,7 @@ private
       tweets = res["results"].first(5).map {|r| twitter_url(r) }
     else
       bot.say("Hmm...didn't work. Got this response:")
-      bot.paste(res.body)
+      bot.paste("#{res.code} (#{res.message})\n#{res.body}")
     end
 
     return tweets
