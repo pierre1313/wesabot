@@ -13,7 +13,7 @@ class TwitterSearchPlugin < Campfire::PollingBot::Plugin
       subject = $1
       tweets = search_twitter(subject)
       if tweets.any?
-        tweets.each {|t| bot.say(t) }
+        tweets.each {|t| bot.tweet(t) }
       else
         bot.say("Couldn't find anything for \"#{subject}\"")        
       end
@@ -33,7 +33,7 @@ private
 
   # construct a twitter url from the given response json
   def twitter_url(json)
-    "\"#{json['text']}\" - #{json['from_user']} (http://twitter.com/#{json['from_user']}/status/#{json['id']})"
+    "http://twitter.com/#{json['from_user']}/status/#{json['id']}"
   end
 
   def search_twitter(subject)
