@@ -38,9 +38,11 @@ private
 
   def search_twitter(subject)
     tweets = []
-    res = HTTParty.get("http://search.twitter.com/search.json",
-                        :query => { :q => subject, :result_type => "mixed" },
-                        :headers => {'User-Agent' => 'wesplease.com'}) # also "popular" and "recent"
+    res = HTTParty.get(
+      "http://search.twitter.com/search.json",
+      :query => { :q => subject, :result_type => "mixed" },
+      # other possible result types include "popular" and "recent"
+      :headers => {'User-Agent' => 'wesabot/1.0 github-hackarts-wesabot'})
     case res.code
     when 200
       tweets = res["results"].first(5).map {|r| twitter_url(r) }
