@@ -44,7 +44,7 @@ private
     case res.code
     when 200
       tweets = res["results"].first(5).map {|r| twitter_url(r) }
-    when 400
+    when 400, 420
       bot.say("Sorry, we've hit the Twitter rate limit for searches.")
     else
       bot.say("Hmm...didn't work. Got this response:")
