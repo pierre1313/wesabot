@@ -1,3 +1,6 @@
+# Note: If wesabot is deployed via capistrano, the reload command won't work,
+# as it relies on wesabot being run from a git repo
+
 set :application, "wesabot"
 set :repository,  "git@github.com:hackarts/wesabot.git"
 
