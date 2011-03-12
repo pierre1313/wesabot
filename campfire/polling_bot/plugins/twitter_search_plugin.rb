@@ -9,7 +9,7 @@ class TwitterSearchPlugin < Campfire::PollingBot::Plugin
     searched = false
 
     case message.command
-    when /(?:(?:what(?:'s)? (?:(?:are )?people|(?:is )?every(?:one|body)) (?:saying|tweeting|think) about)|what's the word on)\s+(?:the )?(.*?)[.?!]?\s*$/i
+    when /(?:(?:what(?:'s)? (?:(?:are )?people|(?:is |does )?every(?:one|body)) (?:saying|tweeting|think) about)|what's the word on)\s+(?:the )?(.*?)[.?!]?\s*$/i
       subject = $1
       tweets = search_twitter(subject)
       if tweets.any?
