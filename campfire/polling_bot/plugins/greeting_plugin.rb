@@ -10,10 +10,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     if message.kind_of?(Campfire::EnterMessage)
       link = catch_up_link(message.person_full_name)
       futures = future_messages(message.person_full_name, message.person)
-      if wants_greeting
-        msg = "Hey #{message.person.downcase}."
-        msg += " Catch up: #{link}" if link
-        bot.say(msg)
+      if wants_greeting && link
+        bot.say("Hey #{message.person.downcase}. Catch up: #{link}")
       end
       futures.each{|m| bot.say(m) }
     elsif message.kind_of?(Campfire::TextMessage)
