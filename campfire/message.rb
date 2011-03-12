@@ -43,7 +43,9 @@ module Campfire
 
     def initialize(params)
       super
-      self.link = params[:link]
+      # FIXME: link is no longer available as a param. If we want the link, we
+      # need to construct it from https://#{subdomain}.campfirenow.com/room/#{params[:room_id]}/paste/#{params[:id]}
+      # self.link = params[:link]
     end
   end
 
@@ -53,7 +55,9 @@ module Campfire
 
     def initialize(params)
       super
-      self.link = params[:link]
+      # FIXME: link is no longer available as a param. If we want the link, we
+      # need to construct it from https://#{subdomain}.campfirenow.com/room/#{params[:room_id]}/uploads/#{params[:id]}/#{params[:filename]} (?)
+      # self.link = params[:link]
     end
   end
 
@@ -92,4 +96,7 @@ module Campfire
 
   # ConferenceCreatedMessage - when a conference call is started
   class ConferenceCreatedMessage < Message; end
+  
+  # TweetMessage - when a tweet is posted
+  class TweetMessage < Message; end
 end
