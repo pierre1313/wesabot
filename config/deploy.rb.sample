@@ -9,8 +9,8 @@ set :user, "wes"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-role :app, "wesplease.com"
-role :web, "wesplease.com"
-role :db,  "wesplease.com", :primary => true
+role :app, "example.com"
+role :web, "example.com"
+role :db,  "example.com", :primary => true
 
 set :use_sudo, false
