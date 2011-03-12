@@ -15,7 +15,7 @@ class TwitterSearchPlugin < Campfire::PollingBot::Plugin
       if tweets.any?
         tweets.each {|t| bot.tweet(t) }
       else
-        bot.say("Couldn't find anything for \"#{subject}\"")        
+        bot.say("Couldn't find anything for \"#{subject}\"")
       end
       return HALT
     end
@@ -39,10 +39,13 @@ private
   def search_twitter(subject)
     tweets = []
     res = HTTParty.get("http://search.twitter.com/search.json",
-                        :query => { :q => subject, :result_type => "mixed" }) # also "popular" and "recent"
+                        :query => { :q => subject, :result_type => "mixed" },
+                        :headers => {'User-Agent' => 'wesplease.com'}) # also "popular" and "recent"
     case res.code
     when 200
       tweets = res["results"].first(5).map {|r| twitter_url(r) }
+    when 400
+      bot.say("Sorry, we've hit the Twitter rate limit for searches.")
     else
       bot.say("Hmm...didn't work. Got this response:")
       bot.paste("#{res.code} (#{res.message})\n#{res.body}")
