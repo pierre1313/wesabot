@@ -51,6 +51,18 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
         "later",
         "see ya",
       ]
+    when /(get|grab|fetch|bring)( me)?( a)? coffee/
+      person = ($1 == "me") ? "you" : $1
+      does = (person == "you") ? "do you" : "does #{person}"
+      boy.say_random [
+        "would #{person} like sugar or cream?",
+        "how #{does} take it?",
+        "coming right up",
+        "It is by caffeine alone I set my mind in motion",
+        "It is by the beans of Java that thoughts acquire speed",
+        "The hands acquire shakes, the shakes become a warning",
+        "It is by caffeine alone I set my mind in motion"
+      ]
     else
       bot.say_random [
         "I have no idea what you're talking about, #{person}.",
