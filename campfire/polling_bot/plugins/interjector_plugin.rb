@@ -43,7 +43,11 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
       # I have no idea what I'm doing
       bot.say "https://img.skitch.com/20110304-1tcmatkhapiq6t51wqqq9igat5.jpg"
     when /^party[?!.]*$/i
+      # party party party party party cat
       bot.say "https://img.skitch.com/20110309-qtd33sy8k5yrdaeqa9e119bwd1.jpg"
+    when /^(bomb|system error)$/i
+      # sorry, a system error has occurred
+      bot.say "https://img.skitch.com/20110312-8g31a37spacdjgatr82g3g98j1.jpg"
     end
   end
 
