@@ -73,9 +73,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   # get link to when the user last left the room so they can catch up
   # only give the link if they've been gone for more than 2 minutes
   def catch_up_link(person_full_name)
-    if message_id = last_message_id(person_full_name)
-      return "#{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{message_id}"
-    end
+    message_id = last_message_id(person_full_name)
+    message_id && message_link(message_id)
   end
 
   # Tell the person who's just entered about what people were asking them to
@@ -106,7 +105,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       candidates.each do |row|
         if row.body.match(future_person)
           verbed = verbs[rand(verbs.size)]
-          future_messages << "#{row.person} #{verbed} future #{person} at: #{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{row.message_id}"
+          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message_id)}"
         elsif row.body.match(future_everybody)
           verbed = verbs[rand(verbs.size)]
           future_messages << "#{row.person} #{verbed} future everybody: \"#{row.body}\""
@@ -130,5 +129,10 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     user.wants_greeting = wants_greeting
     @wants_greeting_cache[user] = wants_greeting
   end
+
+  def message_link(id)
+    "#{bot.base_uri}/room/#{bot.room.id}/transcript/message/#{id}#message_#{id}"
+  end
+
 end
 
