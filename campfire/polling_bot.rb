@@ -69,11 +69,14 @@ module Campfire
           end
         end
 
-        trap("INT") { EM.stop }
+        trap("INT") { EM.stop; raise SystemExit }
       end
 
     rescue Exception => e # leave the room if we crash
-      unless e.kind_of?(SystemExit)
+      if e.kind_of?(SystemExit)
+        room.leave
+        exit 0
+      else
         log_error(e)
         room.leave
         exit 1
