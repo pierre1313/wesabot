@@ -1,7 +1,7 @@
 source :gemcutter
 
 gem "capistrano"
-gem "railsless-deploy"
+gem "railsless-deploy", :require => nil
 gem "tinder"
 gem "dm-core"
 gem "dm-sqlite-adapter"
