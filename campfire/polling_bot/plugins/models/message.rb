@@ -3,7 +3,7 @@ class Message
   include DataMapper::Resource
   property :id,           Serial
   property :room,         Integer, :required => true, :index => true
-  property :message_id,   Integer, :required => true 
+  property :message_id,   Integer, :required => true
   property :message_type, String, :length => 20, :required => true, :index => true
   property :person,       String, :index => true
   property :user_id,      Integer, :required => false, :index => true
@@ -12,4 +12,19 @@ class Message
   property :timestamp,    Integer, :required => true, :index => true
 
   belongs_to :user, :required => false
+
+  def self.last_message(name, time = nil)
+    first(:conditions => {
+        :person => name,
+        :timestamp.lt => (time || Time.now)
+      }, :order => [:timestamp.desc])
+  end
+
+  def self.last_left(name, time = nil)
+    first(:conditions => {
+        :person => name,
+        :message_type => ['Leave','Kick'],
+        :timestamp.lt => (time || Time.now)
+      }, :order => [:timestamp.desc])
+  end
 end
