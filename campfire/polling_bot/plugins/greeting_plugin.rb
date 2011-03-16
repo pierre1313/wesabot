@@ -50,24 +50,23 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
   private
 
-  # return the message id of the user's last entry before leaving the room
+  # return the message id of the user's last entry that we saw
   def last_message_id(person_full_name)
-    last_left = Message.first(
-      :conditions => {:person => person_full_name, :message_type => ['Leave','Kick']},
-      :order => [:timestamp.desc])
+    # look for a leave message more than five minutes ago
+    last_left = Message.last_left(person_full_name, Time.now - 5*60)
+    # look for any message more than ten minutes ago
+    last_message = Message.last_message(person_full_name, Time.now - 10*60)
 
-    if last_left
+    if last_left && last_left.message_type == 'Kick'
       # if person timed out, look for their last entry before the timeout
-      if last_left.message_type == 'Kick'
-        last_left = Message.first(
-          :conditions => {:person => person_full_name, :timestamp.lt => last_left.timestamp},
-          :order => [:timestamp.desc])
-      end
-
-      if last_left && (Time.now.to_i - last_left.timestamp > 120)
-        return last_left.message_id
-      end
+      last_seen = last_message
+    else
+      # if the person said things after their last leave message, they are
+      # probably still in the room, so we use their last message instead
+      last_seen = [last_left, last_message].compact.sort_by{|m| m.timestamp }.last
     end
+
+    return last_seen && last_seen.message_id
   end
 
   # get link to when the user last left the room so they can catch up
