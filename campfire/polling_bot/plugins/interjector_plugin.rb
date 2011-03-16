@@ -48,6 +48,9 @@ class InterjectorPlugin < Campfire::PollingBot::Plugin
     when /^(bomb|system error)$/i
       # sorry, a system error has occurred
       bot.say "https://img.skitch.com/20110312-8g31a37spacdjgatr82g3g98j1.jpg"
+    when /^stop hitting yourself$/i
+      # and the angel said to him, Stop hitting yourself!
+      bot.say "https://img.skitch.com/20110316-q7h49p69pjhhyy8756rha2a1jf.jpg"
     end
   end
 
