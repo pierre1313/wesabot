@@ -50,8 +50,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
   private
 
-  # return the message id of the user's last entry that we saw
-  def last_message_id(person_full_name)
+  # return the last message we saw from the user (that was more than x min ago)
+  def last_message(person_full_name)
     # look for a leave message more than five minutes ago
     last_left = Message.last_left(person_full_name, Time.now - 5*60)
     # look for any message more than ten minutes ago
@@ -66,14 +66,18 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       last_seen = [last_left, last_message].compact.sort_by{|m| m.timestamp }.last
     end
 
-    return last_seen && last_seen.message_id
+    return last_seen
   end
 
   # get link to when the user last left the room so they can catch up
-  # only give the link if they've been gone for more than 2 minutes
   def catch_up_link(person_full_name)
-    message_id = last_message_id(person_full_name)
-    message_id && message_link(message_id)
+    message = last_message(person_full_name)
+    # only give a link if the last message is likely no longer on the first page
+    if message && !message.visible?
+      return message_link(message.id)
+    else
+      return nil
+    end
   end
 
   # Tell the person who's just entered about what people were asking them to
@@ -96,15 +100,15 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     future_person = Regexp.new("future (#{names.join('|')})\\b", Regexp::IGNORECASE)
     future_everybody = Regexp.new("future everybody", Regexp::IGNORECASE)
 
-    if message_id = last_message_id(person_full_name)
+    if message = last_message(person_full_name)
       candidates = Message.all(
-        :message_id.gt => message_id,
+        :message_id.gt => message.id,
         :person.not => ['Fogbugz','Subversion','Capistrano',bot.name],
         :message_type => 'Text')
       candidates.each do |row|
         if row.body.match(future_person)
           verbed = verbs[rand(verbs.size)]
-          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message_id)}"
+          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message.id)}"
         elsif row.body.match(future_everybody)
           verbed = verbs[rand(verbs.size)]
           future_messages << "#{row.person} #{verbed} future everybody: \"#{row.body}\""

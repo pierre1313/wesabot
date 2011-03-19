@@ -27,4 +27,10 @@ class Message
         :timestamp.lt => (time || Time.now)
       }, :order => [:timestamp.desc])
   end
+  
+  # guess whether the message is still on the screen by counting
+  # how many messages there are between it and now
+  def visible?
+    self.class.count(:id.gt => id) < 20
+  end
 end
