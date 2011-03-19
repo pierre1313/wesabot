@@ -99,7 +99,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     if message_id = last_message_id(person_full_name)
       candidates = Message.all(
         :message_id.gt => message_id,
-        :person.not => ['Fogbugz','Subversion','GeneralZod','Capistrano',bot.name],
+        :person.not => ['Fogbugz','Subversion','Capistrano',bot.name],
         :message_type => 'Text')
       candidates.each do |row|
         if row.body.match(future_person)
