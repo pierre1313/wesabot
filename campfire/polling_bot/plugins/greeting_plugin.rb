@@ -50,12 +50,14 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
   private
 
-  # return the last message we saw from the user (that was more than x min ago)
+  # return the last message we saw from the user
   def last_message(person_full_name)
-    # look for a leave message more than five minutes ago
-    last_left = Message.last_left(person_full_name, Time.now - 5*60)
-    # look for any message more than ten minutes ago
-    last_message = Message.last_message(person_full_name, Time.now - 10*60)
+    # look for a leave message
+    last_left = Message.last_left(person_full_name)
+    # look for any message more than a couple minutes ago (this allows us
+    # to say hi in CF and then ask for a catch-up link without getting a link
+    # to the message we just sent)
+    last_message = Message.last_message(person_full_name, Time.now - 120)
 
     if last_left && last_left.message_type == 'Kick'
       # if person timed out, look for their last entry before the timeout
@@ -70,6 +72,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   end
 
   # get link to when the user last left the room so they can catch up
+  # only return a link if the user has been gone long enough
   def catch_up_link(person_full_name)
     message = last_message(person_full_name)
     # only give a link if the last message is likely no longer on the first page
