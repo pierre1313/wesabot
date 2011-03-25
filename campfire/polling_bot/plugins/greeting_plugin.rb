@@ -30,7 +30,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
         bot.say("OK, I've #{old_setting ? 'disabled' : 'enabled'} greetings for you, #{message.person}")
         return HALT
       when /catch me up|ketchup/i
-        if link = catch_up_link(message.person_full_name)
+        if link = catch_up_link(message.person_full_name, true)
           bot.say("Here you go, #{message.person}: #{link}")
         else
           bot.say("Hmm...couldn't find when you last logged out, #{message.person}")
@@ -72,12 +72,12 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
   end
 
   # get link to when the user last left the room so they can catch up
-  # only return a link if the user has been gone long enough
-  def catch_up_link(person_full_name)
+  # only return a link if the user has been gone long enough, unless forced
+  def catch_up_link(person_full_name, force=false)
     message = last_message(person_full_name)
     # only give a link if the last message is likely no longer on the first page
-    if message && !message.visible?
-      return message_link(message.id)
+    if message && (force || !message.visible?)
+      return message_link(message.message_id)
     else
       return nil
     end
@@ -105,13 +105,13 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
 
     if message = last_message(person_full_name)
       candidates = Message.all(
-        :message_id.gt => message.id,
+        :message_id.gt => message.message_id,
         :person.not => ['Fogbugz','Subversion','Capistrano',bot.name],
         :message_type => 'Text')
       candidates.each do |row|
         if row.body.match(future_person)
           verbed = verbs[rand(verbs.size)]
-          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message.id)}"
+          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message.message_id)}"
         elsif row.body.match(future_everybody)
           verbed = verbs[rand(verbs.size)]
           future_messages << "#{row.person} #{verbed} future everybody: \"#{row.body}\""
