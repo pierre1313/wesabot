@@ -111,7 +111,7 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
       candidates.each do |row|
         if row.body.match(future_person)
           verbed = verbs[rand(verbs.size)]
-          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message.message_id)}"
+          future_messages << "#{row.person} #{verbed} future #{person} at: #{message_link(row.message_id)}"
         elsif row.body.match(future_everybody)
           verbed = verbs[rand(verbs.size)]
           future_messages << "#{row.person} #{verbed} future everybody: \"#{row.body}\""
