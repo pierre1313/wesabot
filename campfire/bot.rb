@@ -2,7 +2,7 @@ require "tinder"
 
 module Campfire
   class Bot
-    attr_accessor :config, :room, :name, :campfire
+    attr_accessor :config, :room, :name, :campfire, :debug
 
     def initialize(config)
       self.config = config

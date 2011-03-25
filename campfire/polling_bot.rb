@@ -100,7 +100,9 @@ module Campfire
             end
           end
         rescue Exception => e
+          say("Oops, #{plugin.class} threw an exception. Enable debugging to see it.") unless debug
           log_error(e)
+          break
         end
       end
 
@@ -115,7 +117,9 @@ module Campfire
     end
 
     def log_error(e)
-      logger.error "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+      msg = "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+      logger.error(msg)
+      paste(msg) if debug
     end
 
   end
