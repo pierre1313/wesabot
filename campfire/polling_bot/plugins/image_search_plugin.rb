@@ -11,10 +11,12 @@ class ImageSearchPlugin < Campfire::PollingBot::Plugin
 
     case message.command
     when /(google|flickr)\sfor\sa\s(?:photo|image|picture)\s+of:?\s+(?:a:?\s+)?\s*("?)(.*?)\1$/i
-      photo = next_photo($3, $1)
+      subject = $3
+      photo = next_photo(subject, $1)
       searched = true
     when /(?:photo|image|picture)\s+of:?\s+(?:a:?\s+)?\s*("?)(.*?)\1$/i
-      photo = next_photo($2)
+      subject = $2
+      photo = next_photo(subject)
       searched = true
     end
 
@@ -44,7 +46,9 @@ private
 
     if sources == ["google"] || (sources.include?("google") && bot.config.google_api_key)
       # google search lazy-fetches pages of results, so we only search as far as we have to
-      next_photo ||= query_google(subject).find{|i| !DisplayedImage.first(:uri => i.uri) }.uri
+      if image = query_google(subject).find{|i| !DisplayedImage.first(:uri => i.uri) }
+        next_photo ||= image.uri
+      end
     end
 
     if sources.include?("flickr")
