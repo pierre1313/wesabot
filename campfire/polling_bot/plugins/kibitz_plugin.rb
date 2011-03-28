@@ -79,6 +79,10 @@ class KibitzPlugin < Campfire::PollingBot::Plugin
         "#{bot.other_person(person) || 'Marc'}, tell #{person} to leave me alone.",
         "Not now, #{person}.",
         "brb crying",
+        "what do you think, #{person}?",
+        "That's really something.",
+        "but what can I do? I'm just a lowly bot",
+        "I'll get some electrons on that right away",
         "How do you feel when someone says '#{message.command}' to you, #{person}?"
       ]
     end
