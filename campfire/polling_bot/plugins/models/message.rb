@@ -16,6 +16,7 @@ class Message
   def self.last_message(name, time = nil)
     first(:conditions => {
         :person => name,
+        :message_type.not => 'Enter',
         :timestamp.lt => (time || Time.now)
       }, :order => [:timestamp.desc])
   end
