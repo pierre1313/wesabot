@@ -7,8 +7,10 @@ class ReloadPlugin < Campfire::PollingBot::Plugin
     when /^reload/i
       bot.say("k")
       system("git pull origin master && bundle install")
-      head = `git log -1 --pretty=oneline --abbrev-commit`
-      bot.say("updated to: #{head}")
+      if bot.debug
+        head = `git rev-parse HEAD`
+        bot.say("updated to: https://github.com/hackarts/wesabot/commit/#{head}")
+      end
       bot.say("restarting...")
       exec *INVOCATION
       return HALT
