@@ -100,8 +100,8 @@ class GreetingPlugin < Campfire::PollingBot::Plugin
     name_words = person_full_name.split(/\s+/)
     names << (name_words.first[0,1]+name_words.last[0,1]) if name_words.size > 1
 
-    future_person = Regexp.new("future (#{names.join('|')})\\b", Regexp::IGNORECASE)
-    future_everybody = Regexp.new("future everybody", Regexp::IGNORECASE)
+    future_person = Regexp.new("(?:future |@)(#{names.join('|')})\\b", Regexp::IGNORECASE)
+    future_everybody = Regexp.new("(?:future |@)everybody", Regexp::IGNORECASE)
 
     if message = last_message(person_full_name)
       candidates = Message.all(
