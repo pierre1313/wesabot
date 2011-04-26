@@ -5,6 +5,12 @@ class RemindMePlugin < Campfire::PollingBot::Plugin
   priority 10
   
   NUMBER_WORDS = %w{zero one two three four five six seven eight nine ten}
+  PRONOUN_SUBS = [
+    ["I'm", "you're"],
+    ['my', 'your'],
+    ['I', 'you'],
+  ]
+  
   def process(message)
     case message.command
     when /remind\s+(.*?)\s+(in\s+(\S+)\s+(?:seconds|minutes|hours|days|weeks|years))\s+to\s+(.*)/i
@@ -35,9 +41,10 @@ class RemindMePlugin < Campfire::PollingBot::Plugin
     else
       return
     end
-   
-    action.gsub!(/\bmy\b/i,'your')
-    action.gsub!(/\bI\b/i,'you')
+
+    PRONOUN_SUBS.each do |sub|
+      action.gsub!(/\b#{sub[0]}\b/i, sub[1])
+    end
     
     begin
       time = Chronic.parse(time_string.sub(/^at/, ''))
