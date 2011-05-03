@@ -14,7 +14,7 @@ gem "daemons"
 gem "i18n"
 gem "httparty"
 gem "google-search"
-gem "firering", "~>1.0.6"
+gem "firering", "~>1.0.8", :git => "git://github.com/indirect/firering.git"
 
 group :test do
   gem "rspec", ">= 2.0.0.beta.8"

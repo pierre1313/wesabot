@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/indirect/firering.git
+  revision: fb71d3443bb75a71ebcf88d30cf15e9bb48f56ed
+  specs:
+    firering (1.0.8)
+      em-http-request (~> 0.3.0)
+      eventmachine (~> 0.12.10)
+      yajl-ruby (~> 0.7.6)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -40,10 +49,6 @@ GEM
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
-    firering (1.0.6)
-      em-http-request (~> 0.3.0)
-      eventmachine (~> 0.12.10)
-      yajl-ruby (~> 0.7.6)
     google-search (1.0.2)
       json
     highline (1.6.1)
@@ -102,7 +107,7 @@ DEPENDENCIES
   dm-migrations
   dm-sqlite-adapter
   do_sqlite3
-  firering (~> 1.0.6)
+  firering (~> 1.0.8)!
   google-search
   httparty
   i18n
